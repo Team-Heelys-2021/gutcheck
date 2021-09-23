@@ -2,10 +2,12 @@
   "name": "gutcheck",
   "version": "1.0.0",
   "description": "App to track fiber",
-  "main": "server/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack"
+    "start": "webpack",
+    "dev": "NODE_ENV=development webpack serve --open --hot --mode development",
+    "dev:test": "webpack-dev-server --open --hot --mode development"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,7 @@
     "babel-loader": "^8.2.2",
     "enzyme": "^3.11.0",
     "eslint": "^7.32.0",
+    "html-webpack-plugin": "^5.3.2",
     "jest": "^27.2.1",
     "nodemon": "^2.0.12",
     "prettier": "^2.4.1",

@@ -1,21 +1,48 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const htmlWebpackPlugin = new HtmlWebpackPlugin({
-  template: './index.html',
-})
-
-module.export = {
+module.exports = {
   mode: 'development',
-  entry: './client/index.js',
+  entry: {
+    src: './client/index.js'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/',
   },
   devServer: {
+    static: {
+      directory: path.join(__dirname),
+      publicPath: '/'
+    },
     port: 8080,
-    hot: true
+    hot: true,
   },
-  plugins: [htmlWebpackPlugin]
+  module: {
+    rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      {
+        test: /\.jsx?/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
+        }, 
+      },
+    ]
+  },
+  resolve: {
+    extensions: ['.mjs', '.js', '.json'],
+  },
+  plugins: [new HtmlWebpackPlugin({
+    template: path.resolve(__dirname, 'index.html'),
+    filename: 'index.html',
+  })]
 }
