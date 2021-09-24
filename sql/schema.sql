@@ -15,7 +15,8 @@ CREATE TABLE users (
 CREATE TABLE foods (
   id SERIAL PRIMARY KEY,
   fdcid INTEGER NOT NULL,
-  name VARCHAR NOT NULL
+  name VARCHAR NOT NULL,
+  metadata JSON
 );
 
 CREATE TABLE entries (
