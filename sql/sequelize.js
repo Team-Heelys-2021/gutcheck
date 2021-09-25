@@ -1,7 +1,12 @@
 const { createTestScheduler } = require('@jest/core');
 const { Sequelize, DataTypes, Model } = require('sequelize');
+
+// const dotenv = require('dotenv')
+
+// dotenv.config();
+
 //Passing a connection URI to connect 
-const sequelize = new Sequelize('postgres://hkpbdxsc:ZKe3ogq8nIcjThZCsZ-eg6zbHPIIjERW@fanny.db.elephantsql.com/hkpbdxsc');
+const sequelize = new Sequelize(process.env.PG_URL);
 
 //testing connection 
 async function testConnection() {

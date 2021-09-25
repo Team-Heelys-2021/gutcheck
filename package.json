@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack",
     "dev": "NODE_ENV=development webpack serve --open --hot --mode development",
-    "dev:test": "webpack-dev-server --open --hot --mode development"
+    "dev:test": "webpack-dev-server --open --hot --mode development",
+    "server": "node -r dotenv/config server/index.js",
+    "sql": "node -r dotenv/config sql/sequelize.js"
   },
   "repository": {
     "type": "git",
@@ -20,12 +22,18 @@
   },
   "homepage": "https://github.com/team-axolotl2021/gutcheck#readme",
   "dependencies": {
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.1",
+    "@mui/material": "^5.0.1",
+    "axios": "^0.21.4",
     "express": "^4.17.1",
     "node-postgres": "^0.6.2",
     "pg": "^8.7.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "regenerator-runtime": "^0.13.9",
     "sequelize": "^6.6.5"
   },
   "devDependencies": {
@@ -33,12 +41,17 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
+    "css-loader": "^6.3.0",
+    "dotenv": "^10.0.0",
     "enzyme": "^3.11.0",
     "eslint": "^7.32.0",
     "html-webpack-plugin": "^5.3.2",
     "jest": "^27.2.1",
     "nodemon": "^2.0.12",
     "prettier": "^2.4.1",
+    "sass": "^1.42.1",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.3.0",
     "supertest": "^6.1.6",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0",
