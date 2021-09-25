@@ -15,3 +15,30 @@
 .MuiAutocomplete-root {
   background-color: #EBEFFF;
 }
+
+.auth-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mt-6 {
+  margin-top: 30px;
+}
+
+.text-lg {
+  font-size: 1.3rem;
+}
