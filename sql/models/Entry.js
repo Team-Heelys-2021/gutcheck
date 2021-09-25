@@ -10,6 +10,7 @@ module.exports = function (sequelize, Datatypes) {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
       },
       date: {
         type: DataTypes.DATEONLY, //Date Without time
