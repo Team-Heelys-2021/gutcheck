@@ -7,11 +7,13 @@ import Auth from "./pages/Auth";
 import "./index.scss";
 
 import * as dataService from "./foodDataService";
+import { NoEncryptionGmailerrorredSharp } from "@mui/icons-material";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [results, setResults] = React.useState([]);
   const [search, setSearch] = React.useState("");
+  const [selectedValue, setSelectedValue] = React.useState(null)
   const [entries, setEntries] = React.useState([]);
 
   React.useEffect(() => {
@@ -20,13 +22,25 @@ function App() {
     }
   }, [search]);
 
+  React.useEffect(() => {
+    if (selectedValue) {
+      setEntries([...entries, selectedValue])
+      // TODO: send entry POST request to back end
+      setSearch('')
+      setSelectedValue(null)
+    }
+  }, [selectedValue])
+
   const searchFoods = async () => {
     setResults(await dataService.searchFoods(search));
   };
 
-  const selectFood = (value) => {
-    setEntries([...entries, value]);
-  };
+
+  const handleDeleteEntry = (fdcId) => {
+    const newEntries = entries.filter(entry => entry.fdcId !== fdcId)
+    setEntries(newEntries)
+    // TODO: send entry DELETE request to back end
+  }
 
   return (
     <React.Fragment>
@@ -36,29 +50,20 @@ function App() {
           <Autocomplete
             id="size-small-filled"
             size="small"
+            clearOnBlur={true}
+            clearOnEscape={true}
             options={results}
             getOptionLabel={(option) =>
               `${option.description} ${
-                option.brandName ? `(${option.brandName})` : ""
-              }`
+                option.brandName ? `(${option.brandName})` : ''
+              } - (${option.fdcId})`
             }
-            onChange={(e, value) => selectFood(value)}
-            // defaultValue={}
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip
-                  key={option.fdcId}
-                  variant="outlined"
-                  label={option.title}
-                  size="small"
-                  {...getTagProps({ index })}
-                />
-              ))
-            }
+            onChange={(e, value) => setSelectedValue(value)}
+            value={selectedValue}
             renderInput={(params) => (
               <TextField
                 {...params}
-                variant="filled"
+                variant="outlined"
                 label="Size small"
                 placeholder="Favorites"
                 onChange={(e) => setSearch(e.target.value)}
@@ -69,7 +74,7 @@ function App() {
         </div>
         <div className="grid-item-2">sdfsdfds</div>
         <div className="grid-item-3">
-          <EntryList entries={entries} />
+          <EntryList entries={entries} deleteEntry={handleDeleteEntry}/>
         </div>
       </div>
     </React.Fragment>

@@ -11,7 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 
-export default function EntryList({ entries }) {
+export default function EntryList({ entries, deleteEntry = () => {} }) {
   const [dense, setDense] = React.useState(true);
   const [secondary, setSecondary] = React.useState(false);
   return (
@@ -19,22 +19,26 @@ export default function EntryList({ entries }) {
       sx={{
         display: "flex",
         "& > :not(style)": {
-          m: 1,
+          m: 0,
           width: "100%",
+          border: '1px dashed grey',
+          minHeight: '200px'
         },
       }}
     >
-      <Paper variant="outlined">
+      <Paper variant="outlined" sx={{ margin: -8 }}>
+        {!entries.length && <div className="flex-centered min-height-200"><span>Add foods to get started</span></div>}
         <Grid item xs={12}>
-          <List dense={dense}>
+          <List dense={dense} sx={{ margin: 1 }}>
             {entries.map((entry) => (
               <ListItem
                 key={entry.fdcId}
                 secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
+                  <IconButton edge="end" aria-label="delete" onClick={() => deleteEntry(entry.fdcId)}>
                     <DeleteIcon />
                   </IconButton>
                 }
+                divider={true}
               >
                 <ListItemAvatar>
                   <Avatar>
@@ -42,8 +46,7 @@ export default function EntryList({ entries }) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={entry.description}
-                  secondary={entry.brandName}
+                  primary={`${entry.description} ${entry.brandName ? `(${entry.brandName})` : ''}`}
                 />
               </ListItem>
             ))}

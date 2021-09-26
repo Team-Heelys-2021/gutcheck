@@ -6,7 +6,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import App from './App'
 
-
 const theme = createTheme({
   palette: {
     primary: {
