@@ -6,7 +6,6 @@ const dotenv = require("dotenv");
 module.exports = () => {
   const env = dotenv.config().parsed;
 
-  // reduce it to a nice object, the same as before
   const envKeys = Object.keys(env).reduce((prev, next) => {
     prev[`process.env.${next}`] = JSON.stringify(env[next]);
     return prev;
@@ -22,27 +21,19 @@ module.exports = () => {
       filename: "bundle.js",
     },
     devServer: {
+      port: 8080,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3000',
+          ws: false,
+          changeOrigin: true
+        },
+      },
+      historyApiFallback: true,
+      hot: true,
       static: {
         directory: path.join(__dirname),
         publicPath: "/",
-      },
-      hot: true,
-      proxy: {
-        "/api": {
-          target: "http://localhost:3000",
-          secure: false,
-          changeOrigin: true,
-        },
-        "/": {
-          target: "http://localhost:3000",
-          secure: false,
-          changeOrigin: true,
-        },
-        "/api/*": {
-          target: "http://localhost:3000",
-          secure: false,
-          changeOrigin: true,
-        },
       },
     },
     module: {

@@ -22,9 +22,6 @@ function App() {
     }
   }, [search]);
 
-  React.useEffect(() => {
-    axios.get("/api").then((data) => console.log(data.data));
-  }, []);
 
   React.useEffect(() => {
     if (selectedValue) {
@@ -76,7 +73,8 @@ function App() {
               )}
             />
           </div>
-          <div className="grid-item-2">sdfsdfds</div>
+          <div className="grid-item-2">foobar
+          </div>
           <div className="grid-item-3">
             <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
           </div>

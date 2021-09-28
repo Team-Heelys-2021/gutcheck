@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.static(path.resolve(__dirname, "../client")));
 
-app.get("/debug", (req, res, next) => {
+app.get("/api/debug", (req, res, next) => {
   res.json({ hello: "world" });
 });
 app.get("/", (req, res, next) => {
