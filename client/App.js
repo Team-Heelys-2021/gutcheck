@@ -5,6 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Auth from "./pages/Auth";
 import "./index.scss";
+import axios from "axios";
 
 import * as dataService from "./foodDataService";
 
@@ -12,7 +13,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [results, setResults] = React.useState([]);
   const [search, setSearch] = React.useState("");
-  const [selectedValue, setSelectedValue] = React.useState(null)
+  const [selectedValue, setSelectedValue] = React.useState(null);
   const [entries, setEntries] = React.useState([]);
 
   React.useEffect(() => {
@@ -22,23 +23,27 @@ function App() {
   }, [search]);
 
   React.useEffect(() => {
+    axios.get("/api").then((data) => console.log(data.data));
+  }, []);
+
+  React.useEffect(() => {
     if (selectedValue) {
-      setEntries([...entries, selectedValue])
+      setEntries([...entries, selectedValue]);
       // TODO: send entry POST request to back end
-      setSearch('')
-      setSelectedValue(null)
+      setSearch("");
+      setSelectedValue(null);
     }
-  }, [selectedValue])
+  }, [selectedValue]);
 
   const searchFoods = async () => {
     setResults(await dataService.searchFoods(search));
   };
 
   const handleDeleteEntry = (fdcId) => {
-    const newEntries = entries.filter(entry => entry.fdcId !== fdcId)
-    setEntries(newEntries)
+    const newEntries = entries.filter((entry) => entry.fdcId !== fdcId);
+    setEntries(newEntries);
     // TODO: send entry DELETE request to back end
-  }
+  };
 
   if (isLoggedIn) {
     return (
@@ -54,7 +59,7 @@ function App() {
               options={results}
               getOptionLabel={(option) =>
                 `${option.description} ${
-                  option.brandName ? `(${option.brandName})` : ''
+                  option.brandName ? `(${option.brandName})` : ""
                 } - (${option.fdcId})`
               }
               onChange={(e, value) => setSelectedValue(value)}
@@ -73,15 +78,14 @@ function App() {
           </div>
           <div className="grid-item-2">sdfsdfds</div>
           <div className="grid-item-3">
-            <EntryList entries={entries} deleteEntry={handleDeleteEntry}/>
+            <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
           </div>
         </div>
       </React.Fragment>
     );
   } else {
-    return <Auth />
+    return <Auth />;
   }
-
 }
 
 export default App;
