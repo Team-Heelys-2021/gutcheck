@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack",
-    "dev": "NODE_ENV=development webpack serve --open --hot --mode development",
+    "dev": "NODE_ENV=development concurrently \"webpack serve --open --hot --mode development\" \"nodemon server/index.js\"",
     "dev:test": "webpack-dev-server --open --hot --mode development",
     "server": "node -r dotenv/config server/index.js",
     "sql": "node -r dotenv/config sql/sequelize.js"
@@ -41,6 +41,7 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
+    "concurrently": "^6.2.2",
     "css-loader": "^6.3.0",
     "dotenv": "^10.0.0",
     "enzyme": "^3.11.0",
