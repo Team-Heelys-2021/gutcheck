@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Security } from '@okta/okta-react';
-import { OktaAuth } from '@okta/okta-auth-js';
+import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -35,16 +35,24 @@ const theme = createTheme({
 
 const oktaAuth = new OktaAuth({
   issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
-  redirect_uri: `${window.location.origin}/login/callback`,
-  client_id: process.env.OKTA_CLIENT_ID,
+  redirectUri: `${window.location.origin}/login/callback`,
+  clientId: process.env.OKTA_CLIENT_ID,
 });
+
+const restoreOriginalUri = async (oktaAuth, originalUri) => {
+  // redirect with custom router
+  router.replace({
+    // TODO: This is talking about browser router
+    path: toRelativeUrl(originalUri, baseUrl),
+  });
+};
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Security oktaAuth={oktaAuth}>
+        <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
           <Container maxWidth="lg">
             <App />
           </Container>
