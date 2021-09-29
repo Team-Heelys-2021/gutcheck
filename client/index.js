@@ -1,23 +1,26 @@
-import * as React from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Security } from '@okta/okta-react';
+import { OktaAuth } from '@okta/okta-auth-js';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import App from './App'
+import App from './App';
 
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#7864B9",
+      light: '#7864B9',
       main: '#624CAB',
-      dark: "#513F8D"
+      dark: '#513F8D',
       // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
       light: '#EBEFFF',
       main: '#C1CEFE',
-      dark: "#99ADFF",
+      dark: '#99ADFF',
       contrastText: '#A0DDFF',
     },
     // Used by `getContrastText()` to maximize the contrast between
@@ -30,14 +33,24 @@ const theme = createTheme({
   },
 });
 
+const oktaAuth = new OktaAuth({
+  issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
+  redirect_uri: `${window.location.origin}/login/callback`,
+  client_id: process.env.OKTA_CLIENT_ID,
+});
+
 ReactDOM.render(
   <React.StrictMode>
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <Container maxWidth="lg">
-      <App />
-    </Container>
-  </ThemeProvider>
-  </React.StrictMode>, 
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Security oktaAuth={oktaAuth}>
+          <Container maxWidth="lg">
+            <App />
+          </Container>
+        </Security>
+      </BrowserRouter>
+    </ThemeProvider>
+  </React.StrictMode>,
   document.getElementById('app')
-)
+);

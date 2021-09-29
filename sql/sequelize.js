@@ -6,13 +6,13 @@ const EntryModel = require('./models/Entry.js');
 
 // dotenv.config();
 
-//Passing a connection URI to connect 
-const sequelize = new Sequelize(process.env.PG_URL);
+//Passing a connection URI to connect
+const sequelize = new Sequelize(process.env.PG_URL, { dialect: 'postgres' });
 
-const Users = UserModel(sequelize,Sequelize);
-const Foods = FoodModel(sequelize,Sequelize);
-const Entries = EntryModel(sequelize,Sequelize);
-//testing connection 
+const Users = UserModel(sequelize, Sequelize);
+const Foods = FoodModel(sequelize, Sequelize);
+const Entries = EntryModel(sequelize, Sequelize);
+//testing connection
 // async function testConnection() {
 //   try {
 //     await sequelize.authenticate();
@@ -24,11 +24,11 @@ const Entries = EntryModel(sequelize,Sequelize);
 
 // testConnection();
 //Relationships
-//One to many Users to Entries 
-Users.hasMany(Entries, {as: 'entries'}) // users.getEntries() -> to get the entries 
-Entries.belongsTo(Users); // adds a usersId attribute to Entries to hold the primary key value for Users 
-//One to many Foods to Entries 
-Foods.hasMany(Entries, {as: 'entries'}); // foods.getEntries()
+//One to many Users to Entries
+Users.hasMany(Entries, { as: 'entries' }); // users.getEntries() -> to get the entries
+Entries.belongsTo(Users); // adds a usersId attribute to Entries to hold the primary key value for Users
+//One to many Foods to Entries
+Foods.hasMany(Entries, { as: 'entries' }); // foods.getEntries()
 Entries.belongsTo(Foods); // adds a foodsId attribute to Entries to hold the primary key value for Foods
 
 // //creating tables
@@ -42,9 +42,9 @@ Entries.belongsTo(Foods); // adds a foodsId attribute to Entries to hold the pri
 
 // async function createRecords() {
 //   await sequelize.sync({ force: true });
-//    //creates all the tables 
+//    //creates all the tables
 //   const user = await Users.create({
-//     name: 'John Doe', 
+//     name: 'John Doe',
 //     userName: 'jdoe',
 //     email: 'jdoe@gmail.com',
 //     password: 'hjashdja',
@@ -53,7 +53,7 @@ Entries.belongsTo(Foods); // adds a foodsId attribute to Entries to hold the pri
 //   });
 //   console.log("auto created id", user.id);
 //   const banana = await Foods.create({
-//     fdcId:'1468381', 
+//     fdcId:'1468381',
 //     foodName: 'banana'
 //   });
 //   const firstEntry = await Entries.create({
