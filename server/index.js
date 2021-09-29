@@ -17,7 +17,9 @@ app.use(express.json()) // To parse the incoming requests with JSON payloads
 
 app.use(express.static(path.resolve(__dirname, '../client')))
 
-db.sync({ force: true });
+
+db.sync({  }); // implement the data model change for the sync 
+
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../index.html'))
@@ -34,9 +36,13 @@ app.use(async (req, res, next) => {
     next(error.message);
   }
 });
+
+
 app.get('/dummy', (req, res) => {
   res.status(200);
 })
+
+//add error handler 
 
 app.listen(3000, () => {
   console.log('Running on port 3000')
