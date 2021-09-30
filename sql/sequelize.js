@@ -2,9 +2,9 @@ const { Sequelize } = require('sequelize');
 const UserModel = require('./models/User.js');
 const FoodModel = require('./models/Food.js');
 const EntryModel = require('./models/Entry.js');
-// const dotenv = require('dotenv')
+const  dotenv = require('dotenv')
 
-// dotenv.config();
+dotenv.config();
 
 //Passing a connection URI to connect 
 const sequelize = new Sequelize(process.env.PG_URL);
@@ -31,14 +31,14 @@ Entries.belongsTo(Users); // adds a usersId attribute to Entries to hold the pri
 Foods.hasMany(Entries, {as: 'entries'}); // foods.getEntries()
 Entries.belongsTo(Foods); // adds a foodsId attribute to Entries to hold the primary key value for Foods
 
-// //creating tables
+//creating tables
 // async function createTables() {
 //   await sequelize.sync({ force: true });
 // }
 
 // createTables();
 
-//test case for creating users
+// test case for creating users
 
 // async function createRecords() {
 //   await sequelize.sync({ force: true });
@@ -60,9 +60,9 @@ Entries.belongsTo(Foods); // adds a foodsId attribute to Entries to hold the pri
 //     UserId: 1,
 //     FoodFdcId:'1468381'
 //   })
-//   const users = await Users.findAll();
-//   console.log(users.every(user => user instanceof Users)); // true
-//   console.log("All users:", JSON.stringify(users, null, 2));
+//   const entries = await Entries.findAll();
+//   console.log(entries.every(entry => entry instanceof Entries)); // true
+//   console.log("All entries:", JSON.stringify(entries, null, 2));
 // }
 // createRecords();
 module.exports = {db: sequelize, models: {Users,Foods,Entries}}
