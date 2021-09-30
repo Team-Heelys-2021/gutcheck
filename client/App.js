@@ -53,9 +53,6 @@ function App() {
   // );
 
   if (!authState) return null;
-  if (!authState.isAuthenticated) {
-    history.replace({ path: '/' });
-  }
 
   return (
     <React.Fragment>

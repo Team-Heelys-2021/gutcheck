@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import { useOktaAuth } from '@okta/okta-react';
 
 export default function Login({ setShowRegister = () => {} }) {
-  const { oktaAuth } = useOktaAuth();
+  const { oktaAuth, authState } = useOktaAuth();
   const [sessionToken, setSessionToken] = React.useState();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');

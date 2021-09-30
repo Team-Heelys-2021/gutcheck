@@ -39,7 +39,7 @@ export default function Registration({ setShowRegister = () => {} }) {
 
     if (res.status === 201) {
       oktaAuth
-        .signInWithCredentials({ username, password })
+        .signInWithCredentials({ username: email, password })
         .then((res) => {
           const sessionToken = res.sessionToken;
           setSessionToken(sessionToken);

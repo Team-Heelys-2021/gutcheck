@@ -41,6 +41,7 @@ const oktaAuth = new OktaAuth({
 
 const restoreOriginalUri = async (oktaAuth, originalUri) => {
   // redirect with custom router
+  console.log(originalUri);
   router.replace({
     // TODO: This is talking about browser router
     path: toRelativeUrl(originalUri, baseUrl),

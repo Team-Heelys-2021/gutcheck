@@ -12,6 +12,7 @@ const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: process.env.OKTA_CLIENT_ID,
   issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
 });
+
 const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
