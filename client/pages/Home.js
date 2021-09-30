@@ -57,12 +57,6 @@ const Home = () => {
 
   const login = async () => history.push('/login');
 
-  const testBackend = () => {
-    axios.get('/api/debug').then(({ data }) => {
-      console.log(data);
-    });
-  };
-
   return (
     <div>
       {/* <Link to="/protected">Protected</Link> */}
@@ -94,9 +88,7 @@ const Home = () => {
             )}
           />
         </div>
-        <div className="grid-item-2">
-          <Button onClick={testBackend}>Test Backend</Button>
-        </div>
+        <div className="grid-item-2"></div>
         <div className="grid-item-3">
           <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
         </div>

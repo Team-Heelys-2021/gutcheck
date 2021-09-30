@@ -6,7 +6,6 @@ function userParser(req, res, next) {
   const decodedValue = JSON.parse(
     Buffer.from(base64String, 'base64').toString('ascii')
   );
-  console.log(decodedValue);
   req.user = decodedValue;
   return next();
 }

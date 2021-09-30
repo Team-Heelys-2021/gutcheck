@@ -33,8 +33,6 @@ app.use(async (req, res, next) => {
     if (!req.headers.authorization)
       throw new Error('Authorization header is required');
 
-    console.log(req.headers.authorization);
-
     const accessToken = req.headers.authorization.trim().split(' ')[1];
     await oktaJwtVerifier.verifyAccessToken(accessToken, 'api://default');
     next();
@@ -43,11 +41,6 @@ app.use(async (req, res, next) => {
   }
 });
 app.use(userParser);
-
-app.get('/api/debug', (req, res, next) => {
-  console.log('req.user: ', req.user);
-  res.status(200).json({ message: 'ok' });
-});
 
 app.get('/dummy', (req, res) => {
   res.status(200);
