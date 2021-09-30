@@ -4,8 +4,7 @@ require('dotenv').config();
 const fs = require('fs')
 const cors = require('cors');
 const OktaJwtVerifier = require('@okta/jwt-verifier');
-const {db, models} = require('../sql/sequelize');
-const {Sequelize} = require('sequelize');
+const {db} = require('../sql/sequelize');
 
 
 const oktaJwtVerifier = new OktaJwtVerifier({
@@ -13,8 +12,7 @@ const oktaJwtVerifier = new OktaJwtVerifier({
   issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
 });
 
-const entryRouter = require('./routes/entryRouter.js');
-const { ModeSharp } = require('@mui/icons-material');
+const apiRouter = require('./routes/apiRouter.js');
 
 const app = express(); 
 app.use(cors());
@@ -26,7 +24,6 @@ app.use(express.static(path.resolve(__dirname, '../client')))
 
 
 db.sync({  }); // implement the data model change for the sync 
-
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../index.html'))
@@ -44,7 +41,7 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.use('/entry', entryRouter);
+app.use('/', apiRouter);
 
 app.get('/dummy', (req, res) => {
   res.status(200);
