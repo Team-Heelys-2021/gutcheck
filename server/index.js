@@ -1,12 +1,12 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
-const fs = require('fs');
 const cors = require('cors');
 const OktaJwtVerifier = require('@okta/jwt-verifier');
 
 const authRouter = require('./auth/auth.routes');
 const db = require('../sql/sequelize');
+const userParser = require('./userParser');
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: process.env.OKTA_CLIENT_ID,
@@ -33,12 +33,20 @@ app.use(async (req, res, next) => {
     if (!req.headers.authorization)
       throw new Error('Authorization header is required');
 
+    console.log(req.headers.authorization);
+
     const accessToken = req.headers.authorization.trim().split(' ')[1];
     await oktaJwtVerifier.verifyAccessToken(accessToken, 'api://default');
     next();
   } catch (error) {
     next(error.message);
   }
+});
+app.use(userParser);
+
+app.get('/api/debug', (req, res, next) => {
+  console.log('req.user: ', req.user);
+  res.status(200).json({ message: 'ok' });
 });
 
 app.get('/dummy', (req, res) => {

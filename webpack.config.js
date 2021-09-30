@@ -13,9 +13,7 @@ module.exports = () => {
 
   return {
     mode: 'development',
-    entry: {
-      src: './client/index.js',
-    },
+    entry: ['@babel/polyfill', './client/index.js'],
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.js',

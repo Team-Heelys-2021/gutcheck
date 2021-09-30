@@ -13,6 +13,7 @@ import axios from 'axios';
 
 export default function Registration({ setShowRegister = () => {} }) {
   const { oktaAuth } = useOktaAuth();
+  const [sessionToken, setSessionToken] = React.useState();
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -47,10 +48,12 @@ export default function Registration({ setShowRegister = () => {} }) {
         })
         .catch((err) => console.log('Found an error', err));
     }
-
-    console.log(res);
-    // oktaAuth.setShowRegister(false);
   };
+
+  if (sessionToken) {
+    // Hide form while sessionToken is converted into id/access tokens
+    return null;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
