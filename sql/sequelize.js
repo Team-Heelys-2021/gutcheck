@@ -65,4 +65,4 @@ Entries.belongsTo(Foods); // adds a foodsId attribute to Entries to hold the pri
 //   console.log("All users:", JSON.stringify(users, null, 2));
 // }
 // createRecords();
-module.exports = sequelize;
+module.exports = {db: sequelize, models: {Users,Foods,Entries}}
