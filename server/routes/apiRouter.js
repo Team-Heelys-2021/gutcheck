@@ -10,6 +10,8 @@ router.post(
     res.status(200).json({ foodFdcId: res.locals.foodFdcId });
   }
 );
+//delete entry 
+// router.delete('/entry', ); 
 
 router.get('/dashboard', (req, res) => {
   res.status(200).json([

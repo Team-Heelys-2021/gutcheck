@@ -4,7 +4,7 @@ const entryController = {};
 const {models: {Foods,Entries}} = require('../../sql/sequelize');
 
 entryController.verifyOrCreateFood = async (req, res, next) => {
-  const {fdcId, lowercaseDescription, metaData} = req.body.entry; 
+  const {fdcId, lowercaseDescription, metaData} = req.body.food; 
   const food = await Foods.findAll({
     where: {
       fdcId: fdcId
@@ -30,5 +30,6 @@ entryController.createEntry = async (req, res, next) => {
   })
   next(); 
 };
+
 
 module.exports = entryController; 
