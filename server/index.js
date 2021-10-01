@@ -46,6 +46,11 @@ app.get('/dummy', (req, res) => {
   res.status(200);
 });
 
+app.get('/api/debug', (req, res, next) => {
+  console.log(req.user);
+  res.json({ protected: 'ok' });
+});
+
 //add error handler
 
 app.listen(3000, () => {

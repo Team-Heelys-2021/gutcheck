@@ -3,22 +3,24 @@ import AppBar from '../components/AppBar';
 import EntryList from '../components/EntryList';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 
 import { useFoods } from '../hooks/useFoods';
 import { useAuth } from '../hooks/useAuth';
-import axios from 'axios';
 
 const Home = () => {
   const [search, setSearch] = React.useState('');
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [entries, setEntries] = React.useState([]);
   const history = useHistory();
-  const { oktaAuth, authState } = useOktaAuth();
+  const { authState } = useOktaAuth();
   const { foodsList, doFoodsSearch } = useFoods();
   useAuth();
+
+  React.useEffect(() => {
+    axios.get('/api/debug');
+  }, [authState]);
 
   if (authState && !authState.isAuthenticated) {
     history.replace('/login');
@@ -96,4 +98,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default Home;
