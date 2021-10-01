@@ -8,7 +8,8 @@
     "start": "webpack",
     "dev": "cross-env NODE_ENV=development concurrently \"webpack serve --open --hot --mode development\" \"nodemon server/index.js\"",
     "dev:test": "webpack-dev-server --open --hot --mode development",
-    "server": "nodemon -r dotenv/config server/index.js"
+    "server": "nodemon -r dotenv/config server/index.js",
+    "sql": "node -r dotenv/config sql/sequelize.js"
   },
   "repository": {
     "type": "git",

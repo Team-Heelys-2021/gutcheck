@@ -5,7 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
-
+import axios from 'axios';
 import { useFoods } from '../hooks/useFoods';
 import { useAuth } from '../hooks/useAuth';
 
@@ -31,11 +31,17 @@ const Home = () => {
   React.useEffect(() => {
     if (selectedValue) {
       setEntries([...entries, selectedValue]);
-      // TODO: send entry POST request to back end
+    //send entry POST request to back end
+      syncEntries(selectedValue); 
       setSearch('');
       setSelectedValue(null);
     }
   }, [selectedValue]);
+  
+  const syncEntries = async (food) => {
+    await axios.post('/api/entry', {food});
+  }
+
 
   const searchFoods = async () => {
     await doFoodsSearch(search);
