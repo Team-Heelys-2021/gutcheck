@@ -1,114 +1,155 @@
-import * as React from 'react'
+import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { EmojiNatureOutlined } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useOktaAuth } from '@okta/okta-react';
+import axios from 'axios';
 
 export default function Registration({ setShowRegister = () => {} }) {
-  const handleSubmit = (event) => {
+  const { oktaAuth } = useOktaAuth();
+  const [sessionToken, setSessionToken] = React.useState();
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    setShowRegister(false)
+    const parsedName = name.trim().split(' ');
+    const [firstName, lastName] = [
+      parsedName[0],
+      parsedName[parsedName.length - 1],
+    ];
+
+    const res = await axios.post(
+      '/api/auth/register',
+      {
+        firstName,
+        lastName,
+        login: email,
+        email,
+        password,
+      },
+      { withCredentials: true }
+    );
+
+    if (res.status === 201) {
+      oktaAuth
+        .signInWithCredentials({ username: email, password })
+        .then((res) => {
+          const sessionToken = res.sessionToken;
+          setSessionToken(sessionToken);
+          oktaAuth.signInWithRedirect({ sessionToken });
+        })
+        .catch((err) => console.log('Found an error', err));
+    }
   };
 
+  if (sessionToken) {
+    // Hide form while sessionToken is converted into id/access tokens
+    return null;
+  }
+
   return (
-      <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs">
       <div className="flex flex-center mt-6 text-lg">Welcome to Gutcheck</div>
-        <Box
-          sx={{
-            marginTop: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <EmojiNatureOutlined />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Full Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-          </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid 
-              container 
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ mb: 2 }}
-            >
-              <Grid item >
-                <Link href="#" variant="body2" onClick={() => setShowRegister(false)}>
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
+      <Box
+        sx={{
+          marginTop: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <EmojiNatureOutlined />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="name"
+                name="name"
+                required
+                fullWidth
+                id="name"
+                label="Full Name"
+                autoFocus
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
             </Grid>
-          </Box>
+            {/* <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+              />
+            </Grid> */}
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ mb: 2 }}
+          >
+            <Grid item>
+              <Link
+                href="#"
+                variant="body2"
+                onClick={() => setShowRegister(false)}
+              >
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
-      </Container>
+      </Box>
+    </Container>
   );
 }
