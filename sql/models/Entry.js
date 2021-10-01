@@ -16,6 +16,13 @@ module.exports = function (sequelize, Datatypes) {
         type: DataTypes.DATEONLY, //Date Without time
         defaultValue: DataTypes.NOW,
       },
+      userId: {
+        type: DataTypes.STRING, 
+        allowNull: false,
+      },
+      foodId: {
+        type: DataTypes.INTEGER, 
+      }
     },
     {
       freezeTableName: true,
