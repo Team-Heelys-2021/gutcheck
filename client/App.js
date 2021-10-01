@@ -3,6 +3,7 @@ import Auth from './pages/Auth';
 import { Route, Switch, useHistory, withRouter } from 'react-router-dom';
 import { Security, LoginCallback } from '@okta/okta-react';
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
+import Dashboard from './pages/Dashboard';
 
 import './index.scss';
 import Home from './pages/Home';
@@ -36,6 +37,7 @@ function App() {
           <Route path="/login">
             <Auth />
           </Route>
+          <Route path="/dashboard" component={Dashboard} />
           <Route exact path="/">
             <Home />
           </Route>
