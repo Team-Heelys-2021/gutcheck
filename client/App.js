@@ -1,89 +1,48 @@
-import * as React from "react";
-import AppBar from "./components/AppBar";
-import EntryList from "./components/EntryList";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import Auth from "./pages/Auth";
-import "./index.scss";
-import axios from "axios";
+import * as React from 'react';
+import Auth from './pages/Auth';
+import { Route, Switch, useHistory, withRouter } from 'react-router-dom';
+import { Security, LoginCallback } from '@okta/okta-react';
+import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 
-import * as dataService from "./foodDataService";
+import './index.scss';
+import Home from './pages/Home';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
-  const [results, setResults] = React.useState([]);
-  const [search, setSearch] = React.useState("");
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const [entries, setEntries] = React.useState([]);
-
-  React.useEffect(() => {
-    if (search.length > 1) {
-      searchFoods(search);
-    }
-  }, [search]);
-
-
-  React.useEffect(() => {
-    if (selectedValue) {
-      setEntries([...entries, selectedValue]);
-      // TODO: send entry POST request to back end
-      setSearch("");
-      setSelectedValue(null);
-    }
-  }, [selectedValue]);
-
-  const searchFoods = async () => {
-    setResults(await dataService.searchFoods(search));
+  const history = useHistory();
+  const onAuthRequired = () => {
+    history.push('/login');
   };
 
-  const handleDeleteEntry = (fdcId) => {
-    const newEntries = entries.filter((entry) => entry.fdcId !== fdcId);
-    setEntries(newEntries);
-    // TODO: send entry DELETE request to back end
+  const oktaAuth = new OktaAuth({
+    issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
+    redirectUri: `${window.location.origin}/login/callback`,
+    clientId: process.env.OKTA_CLIENT_ID,
+    onAuthRequired: onAuthRequired,
+    pkce: true,
+  });
+
+  const restoreOriginalUri = async (_oktaAuth, originalUri) => {
+    // originalUri value is null and was throwing error.
+    // Probably supposed to be the originating location that you weren't authorized to access
+    // and resulted in a redirect to /login. When authed, it should take you back...
+    history.replace('/');
   };
 
-  if (isLoggedIn) {
-    return (
-      <React.Fragment>
-        <AppBar />
-        <div className="grid-container">
-          <div className="grid-item-1">
-            <Autocomplete
-              id="size-small-filled"
-              size="small"
-              clearOnBlur={true}
-              clearOnEscape={true}
-              options={results}
-              getOptionLabel={(option) =>
-                `${option.description} ${
-                  option.brandName ? `(${option.brandName})` : ""
-                } - (${option.fdcId})`
-              }
-              onChange={(e, value) => setSelectedValue(value)}
-              value={selectedValue}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Size small"
-                  placeholder="Favorites"
-                  onChange={(e) => setSearch(e.target.value)}
-                  value={search}
-                />
-              )}
-            />
-          </div>
-          <div className="grid-item-2">foobar
-          </div>
-          <div className="grid-item-3">
-            <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  } else {
-    return <Auth />;
-  }
+  return (
+    <React.Fragment>
+      <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
+        <Switch>
+          <Route path="/login/callback" component={LoginCallback} />
+          <Route path="/login">
+            <Auth />
+          </Route>
+          <Route exact path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Security>
+    </React.Fragment>
+  );
 }
 
-export default App;
+export default withRouter(App);

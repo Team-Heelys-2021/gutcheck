@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const entryController = {};
-const {Foods,Entries} = require('../../sql/sequelize');
+const {models: {Foods,Entries}} = require('../../sql/sequelize');
 
 entryController.verifyOrCreateFood = async (req, res, next) => {
   const {fdcId, lowercaseDescription, metaData} = req.body.entry; 

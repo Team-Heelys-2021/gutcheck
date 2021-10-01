@@ -1,23 +1,24 @@
-import * as React from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import App from './App'
+import App from './App';
 
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#7864B9",
+      light: '#7864B9',
       main: '#624CAB',
-      dark: "#513F8D"
+      dark: '#513F8D',
       // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
       light: '#EBEFFF',
       main: '#C1CEFE',
-      dark: "#99ADFF",
+      dark: '#99ADFF',
       contrastText: '#A0DDFF',
     },
     // Used by `getContrastText()` to maximize the contrast between
@@ -32,12 +33,14 @@ const theme = createTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <Container maxWidth="lg">
-      <App />
-    </Container>
-  </ThemeProvider>
-  </React.StrictMode>, 
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Container maxWidth="lg">
+          <App />
+        </Container>
+      </BrowserRouter>
+    </ThemeProvider>
+  </React.StrictMode>,
   document.getElementById('app')
-)
+);

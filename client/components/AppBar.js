@@ -6,12 +6,16 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import LogoutIcon from '@mui/icons-material/LogoutOutlined'
+import LogoutIcon from '@mui/icons-material/LogoutOutlined';
+import { useOktaAuth } from '@okta/okta-react';
 
 export default function ButtonAppBar() {
+  const { oktaAuth } = useOktaAuth();
+  const logout = async () => oktaAuth.signOut();
+
   return (
     <Box sx={{ flexGrow: 1, marginTop: 1 }}>
-      <AppBar position="static" sx={{ borderRadius: '3px' }} >
+      <AppBar position="static" sx={{ borderRadius: '3px' }}>
         <Toolbar variant="dense">
           <IconButton
             size="large"
@@ -25,7 +29,10 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Gutcheck
           </Typography>
-          <Button color="inherit">Logout<LogoutIcon sx={{ ml: 1 }}/></Button>
+          <Button color="inherit" onClick={logout}>
+            Logout
+            <LogoutIcon sx={{ ml: 1 }} />
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
