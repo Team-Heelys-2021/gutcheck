@@ -18,10 +18,6 @@ const Home = () => {
   const { foodsList, doFoodsSearch } = useFoods();
   useAuth();
 
-  React.useEffect(() => {
-    axios.get('/api/debug');
-  }, [authState]);
-
   if (authState && !authState.isAuthenticated) {
     history.replace('/login');
   }
