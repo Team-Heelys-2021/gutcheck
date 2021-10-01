@@ -7,11 +7,18 @@ router.post(
   entryController.verifyOrCreateFood,
   entryController.createEntry,
   (req, res) => {
+    console.log('foodFdcId is ', res.locals.foodFdcId);
     res.status(200).json({ foodFdcId: res.locals.foodFdcId });
   }
 );
 //delete entry 
 // router.delete('/entry', ); 
+
+
+//TODO: Get req to entry to populate all the entries for the day 
+router.get('/entry', entryController.getAllEntries, (req, res) => {
+  res.status(200);
+})
 
 router.get('/dashboard', (req, res) => {
   res.status(200).json([

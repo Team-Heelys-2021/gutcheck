@@ -4,8 +4,9 @@ const entryController = {};
 const {models: {Foods,Entries}} = require('../../sql/sequelize');
 
 entryController.verifyOrCreateFood = async (req, res, next) => {
-  const {fdcId, lowercaseDescription, metaData} = req.body.food; 
-  const food = await Foods.findAll({
+  const {fdcId, lowercaseDescription,...metaData} = req.body.food; 
+  console.log(req.body);
+  const food = await Foods.findOne({
     where: {
       fdcId: fdcId
     }
@@ -15,7 +16,7 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
     await Foods.create({
       fdcId: fdcId, 
       foodName: lowercaseDescription,
-      metaData: metaData
+      metaData: JSON.stringify(metaData)
     })
   }
   res.locals.foodFdcId = fdcId; 
@@ -23,12 +24,17 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
 };
 entryController.createEntry = async (req, res, next) => {
   //TO DO: not sure about what the headers will give us, make sure to get the subId correctly 
-  const {sub} = req.headers.authentication; 
+  const {uid} = req.user;
+  console.log("food id" , res.locals.foodFdcId);
   await Entries.create({
-    userId: sub, 
-    fdcId: res.locals.foodFdcId
+    userId: uid, 
+    foodId: res.locals.foodFdcId
   })
   next(); 
+};
+//TODO: get all the entries 
+entryController.getAllEntries = async (req,res,next) => {
+
 };
 
 

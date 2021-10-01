@@ -4,7 +4,9 @@ require('dotenv').config();
 const cors = require('cors');
 const OktaJwtVerifier = require('@okta/jwt-verifier');
 const {db} = require('../sql/sequelize');
-
+const authRouter = require('./auth/auth.routes');
+const userParser = require('./userParser');
+const apiRouter = require('./routes/apiRouter');
 
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: process.env.OKTA_CLIENT_ID,
@@ -20,7 +22,7 @@ app.use(express.static(path.resolve(__dirname, '../client')));
 
 db.sync({}); // implement the data model change for the sync
 
-app.use('/api/auth', authRouter);
+app.use('/api/auth' , authRouter);
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../index.html'));
@@ -33,14 +35,14 @@ app.use(async (req, res, next) => {
 
     const accessToken = req.headers.authorization.trim().split(' ')[1];
     await oktaJwtVerifier.verifyAccessToken(accessToken, 'api://default');
+    console.log(accessToken);
     next();
   } catch (error) {
     next(error.message);
   }
-});
+}, userParser);
 
 app.use('/api', apiRouter);
-app.use(userParser);
 
 app.get('/dummy', (req, res) => {
   res.status(200);
