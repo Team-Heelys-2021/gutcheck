@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 const UserModel = require('./models/User.js');
 const FoodModel = require('./models/Food.js');
 const EntryModel = require('./models/Entry.js');
-const  dotenv = require('dotenv')
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -62,4 +62,4 @@ const Entries = EntryModel(sequelize, Sequelize);
 //   console.log("All entries:", JSON.stringify(entries, null, 2));
 // }
 // createRecords();
-module.exports = {db: sequelize, models: {Users,Foods,Entries}}
+module.exports = { db: sequelize, models: { Users, Foods, Entries } };

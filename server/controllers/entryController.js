@@ -10,9 +10,9 @@ const getDate = () => {
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   const yyyy = today.getFullYear();
-  today = yyyy + '-' + mm + '-' + dd; 
+  today = yyyy + '-' + mm + '-' + dd;
   return today;
-}
+};
 
 entryController.verifyOrCreateFood = async (req, res, next) => {
   const { fdcId, lowercaseDescription, ...metaData } = req.body.food;
@@ -42,33 +42,55 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
 entryController.createEntry = async (req, res, next) => {
   //TO DO: not sure about what the headers will give us, make sure to get the subId correctly
   const { uid } = req.user;
-  console.log('food id', res.locals.foodFdcId);
   try {
-    await Entries.create({
+    const entry = await Entries.create({
       userId: uid,
       foodId: res.locals.foodFdcId,
     });
+    res.locals.entryId = entry.id;
   } catch (e) {
     return next(e);
   }
   next();
 };
+
 //TODO: get all the entries
 entryController.getAllEntries = async (req, res, next) => {
   const today = getDate();
-  const userId = req.user.uid; 
+  const userId = req.user.uid;
   try {
-    const entries = await Entries.findAll({
+    let entries = await Entries.findAll({
+      attributes: ['id', 'foodId'],
       where: {
-        userId: userId, 
-        date: today
-      }
-    })
-    res.locals.entries = entries; 
-  } catch(e) {
-    return next(e)
+        userId: userId,
+        date: today,
+      },
+    });
+    const foodIds = entries.map((entry) => entry.foodId);
+    let foods = await Foods.findAll({
+      attributes: ['fdcId', 'foodName', 'metaData'],
+      where: {
+        fdcId: foodIds,
+      },
+    });
+    foods = foods.map((food) => {
+      let { fdcId, foodName, metaData } = food.dataValues;
+      metaData = JSON.parse(metaData);
+      const {
+        dataValues: { id: entryId },
+      } = entries.find((entry) => entry.dataValues.foodId === fdcId);
+      return { fdcId, foodName, ...metaData, entryId };
+    });
+    res.locals.entries = foods;
+
+    //  [{ entryId, fdcId, foodName, ...JSON.parse(metaData) }]
+  } catch (e) {
+    console.log(e);
+    return next(e);
   }
-  next()
+  next();
 };
+
+entryController.deleteEntry = async (req, res, next) => {};
 
 module.exports = entryController;

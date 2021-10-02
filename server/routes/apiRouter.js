@@ -8,18 +8,16 @@ router.post(
   entryController.createEntry,
   (req, res) => {
     console.log('foodFdcId is ', res.locals.foodFdcId);
-    res.status(200).json({ foodFdcId: res.locals.foodFdcId });
+    res.status(200).json({ entryId: res.locals.entryId });
   }
 );
-//delete entry 
-// router.delete('/entry', ); 
+//delete entry
+// router.delete('/entry', );
 
-
-//TODO: Get req to entry to populate all the entries for the day 
+//TODO: Get req to entry to populate all the entries for the day
 router.get('/entry', entryController.getAllEntries, (req, res) => {
-  console.log('entries is ', res.locals.entries);
-  res.status(200).json({ entries: res.locals.entries});
-})
+  res.status(200).json({ entries: res.locals.entries });
+});
 
 router.get('/dashboard', (req, res) => {
   res.status(200).json([
@@ -45,7 +43,7 @@ router.get('/dashboard', (req, res) => {
           foodsId: 5,
           fdcId: 386410,
           foodName: 'quinoa',
-        }
+        },
       ],
     },
     {
@@ -53,9 +51,9 @@ router.get('/dashboard', (req, res) => {
       foods: [
         {
           foodsId: 7,
-          fdcId: 360294 ,
+          fdcId: 360294,
           foodName: 'brown rice',
-        }
+        },
       ],
     },
     {

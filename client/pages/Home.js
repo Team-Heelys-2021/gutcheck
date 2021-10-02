@@ -30,25 +30,33 @@ const Home = () => {
 
   React.useEffect(() => {
     if (authState?.isAuthenticated) {
-      axios.get('/api/entry').then(({data: { entries }}) => {
-        setEntries(entries)
-      }) 
+      axios.get('/api/entry').then(({ data: { entries } }) => {
+        setEntries(entries);
+      });
     }
   }, [authState]);
 
   React.useEffect(() => {
     if (selectedValue) {
-      setEntries([...entries, selectedValue]);
-    //send entry POST request to back end
-      syncEntries(selectedValue); 
-      setSearch('');
-      setSelectedValue(null);
+      syncEntries(selectedValue).then((entryId) => {
+        if (entryId) {
+          const food = { entryId, ...selectedValue };
+          setEntries([...entries, food]);
+          setSearch('');
+          setSelectedValue(null);
+        } else {
+          throw new Error('Failed to save entry');
+        }
+      });
     }
   }, [selectedValue]);
-  
+
   const syncEntries = async (food) => {
-    await axios.post('/api/entry', {food});
-  }
+    const {
+      data: { entryId },
+    } = await axios.post('/api/entry', { food });
+    return entryId;
+  };
 
   const searchFoods = async () => {
     await doFoodsSearch(search);
@@ -99,8 +107,7 @@ const Home = () => {
             )}
           />
         </div>
-        <div className="grid-item-2">
-        </div>
+        <div className="grid-item-2"></div>
         <div className="grid-item-3">
           <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
         </div>
