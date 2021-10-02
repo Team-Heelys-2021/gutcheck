@@ -25,8 +25,8 @@ const Entries = EntryModel(sequelize, Sequelize);
 // testConnection();
 //Relationships
 //One to many Foods to Entries
-Foods.hasMany(Entries, { as: 'entries' }); // foods.getEntries()
-Entries.belongsTo(Foods,{foreignKey: 'foodId'}); // adds a foodsId attribute to Entries to hold the primary key value for Foods
+// Foods.hasMany(Entries, { as: 'entries' }); // foods.getEntries()
+// Entries.belongsTo(Foods,{foreignKey: 'foodId'}); // adds a foodsId attribute to Entries to hold the primary key value for Foods
 
 //creating tables
 // async function createTables() {

@@ -55,7 +55,20 @@ entryController.createEntry = async (req, res, next) => {
 };
 //TODO: get all the entries
 entryController.getAllEntries = async (req, res, next) => {
-  
+  const today = getDate();
+  const userId = req.user.uid; 
+  try {
+    const entries = await Entries.findAll({
+      where: {
+        userId: userId, 
+        date: today
+      }
+    })
+    res.locals.entries = entries; 
+  } catch(e) {
+    return next(e)
+  }
+  next()
 };
 
 module.exports = entryController;
