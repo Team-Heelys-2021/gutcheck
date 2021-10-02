@@ -1,5 +1,6 @@
 const entryController = {};
 const {
+  db,
   models: { Foods, Entries },
 } = require('../../sql/sequelize');
 
@@ -15,7 +16,8 @@ const getDate = () => {
 };
 
 entryController.verifyOrCreateFood = async (req, res, next) => {
-  const { fdcId, lowercaseDescription, ...metaData } = req.body.food;
+  const { fdcId, lowercaseDescription } = req.body.food;
+  const metaData = req.body.food;
   console.log(req.body);
   const food = await Foods.findOne({
     where: {
@@ -59,31 +61,14 @@ entryController.getAllEntries = async (req, res, next) => {
   const today = getDate();
   const userId = req.user.uid;
   try {
-    let entries = await Entries.findAll({
-      attributes: ['id', 'foodId'],
-      where: {
-        userId: userId,
-        date: today,
-      },
+    const entries = await db.query(
+      `SELECT * FROM "Entries", "Foods" WHERE "Entries"."date" = '${today}' AND "Foods"."fdcId" = "Entries"."foodId" AND "Entries"."userId" = '${userId}' `
+    );
+    const formattedEntries = entries[0].map((entry) => {
+      const metaData = JSON.parse(entry.metaData);
+      return { ...metaData, entryId: entry.id };
     });
-    const foodIds = entries.map((entry) => entry.foodId);
-    let foods = await Foods.findAll({
-      attributes: ['fdcId', 'foodName', 'metaData'],
-      where: {
-        fdcId: foodIds,
-      },
-    });
-    foods = foods.map((food) => {
-      let { fdcId, foodName, metaData } = food.dataValues;
-      metaData = JSON.parse(metaData);
-      const {
-        dataValues: { id: entryId },
-      } = entries.find((entry) => entry.dataValues.foodId === fdcId);
-      return { fdcId, foodName, ...metaData, entryId };
-    });
-    res.locals.entries = foods;
-
-    //  [{ entryId, fdcId, foodName, ...JSON.parse(metaData) }]
+    res.locals.entries = formattedEntries;
   } catch (e) {
     console.log(e);
     return next(e);
