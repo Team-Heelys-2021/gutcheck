@@ -18,9 +18,15 @@ router.post(
 
 //TODO: Get req to entry to populate all the entries for the day
 router.get('/entry', entryController.getAllEntries, (req, res) => {
-  console.log('entries is ', res.locals.entries);
-  res.status(200).json({ entries: res.locals.entries });
+  // console.log('entries is ', res.locals.entries);
+  res.status(200).json({ entries: res.locals.entries});
 });
+
+
+router.get('/dashboard', dashboardController.getData, (req,res) => {
+  res.status(200).json(res.locals.data)
+})
+
 
 // router.get('/dashboard', (req, res) => {
 //   res.status(200).json([

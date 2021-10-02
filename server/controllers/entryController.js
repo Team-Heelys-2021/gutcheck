@@ -15,6 +15,8 @@ const getDate = () => {
   return today;
 };
 
+
+
 entryController.verifyOrCreateFood = async (req, res, next) => {
   const { fdcId, lowercaseDescription } = req.body.food;
   const metaData = req.body.food;
@@ -90,5 +92,6 @@ entryController.deleteEntry = async (req, res, next) => {
   }
   res.status(204).json({ success: true });
 };
+
 
 module.exports = entryController;
