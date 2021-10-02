@@ -14,6 +14,8 @@ const getDate = () => {
   return today;
 }
 
+
+
 entryController.verifyOrCreateFood = async (req, res, next) => {
   const { fdcId, lowercaseDescription } = req.body.food;
   const metaData = req.body.food;
@@ -71,5 +73,6 @@ entryController.getAllEntries = async (req, res, next) => {
   }
   next()
 };
+
 
 module.exports = entryController;
