@@ -14,4 +14,8 @@ dashboardController.getData = async (req, res, next) => {
   })
 }; 
 
+const getCount = () => {
+  
+}
+
 module.exports = dashboardController;
