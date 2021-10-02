@@ -8,6 +8,7 @@ import { useOktaAuth } from '@okta/okta-react';
 import axios from 'axios';
 import { useFoods } from '../hooks/useFoods';
 import { useAuth } from '../hooks/useAuth';
+import Thermometer from '../components/Thermometer';
 
 const Home = () => {
   const [search, setSearch] = React.useState('');
@@ -30,34 +31,46 @@ const Home = () => {
 
   React.useEffect(() => {
     if (authState?.isAuthenticated) {
-      axios.get('/api/entry').then(({data: { entries }}) => {
-        setEntries(entries)
-      }) 
+      axios.get('/api/entry').then(({ data: { entries } }) => {
+        setEntries(entries);
+      });
     }
   }, [authState]);
 
   React.useEffect(() => {
     if (selectedValue) {
-      setEntries([...entries, selectedValue]);
-    //send entry POST request to back end
-      syncEntries(selectedValue); 
-      setSearch('');
-      setSelectedValue(null);
+      syncEntries(selectedValue).then((entryId) => {
+        if (entryId) {
+          const food = { entryId, ...selectedValue };
+          setEntries([...entries, food]);
+          setSearch('');
+          setSelectedValue(null);
+        } else {
+          throw new Error('Failed to save entry');
+        }
+      });
     }
   }, [selectedValue]);
-  
+
   const syncEntries = async (food) => {
-    await axios.post('/api/entry', {food});
-  }
+    const {
+      data: { entryId },
+    } = await axios.post('/api/entry', { food });
+    return entryId;
+  };
 
   const searchFoods = async () => {
     await doFoodsSearch(search);
   };
 
-  const handleDeleteEntry = (fdcId) => {
-    const newEntries = entries.filter((entry) => entry.fdcId !== fdcId);
-    setEntries(newEntries);
-    // TODO: send entry DELETE request to back end
+  const handleDeleteEntry = async (entryId) => {
+    try {
+      await axios.delete(`/api/entry/${entryId}`);
+      const newEntries = entries.filter((entry) => entry.entryId !== entryId);
+      setEntries(newEntries);
+    } catch (e) {
+      console.log('An error occurred when deleting ', entryId);
+    }
   };
 
   const redirectToLogin = () => {
@@ -100,6 +113,7 @@ const Home = () => {
           />
         </div>
         <div className="grid-item-2">
+          <Thermometer entries={entries} />
         </div>
         <div className="grid-item-3">
           <EntryList entries={entries} deleteEntry={handleDeleteEntry} />

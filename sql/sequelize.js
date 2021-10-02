@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 const UserModel = require('./models/User.js');
 const FoodModel = require('./models/Food.js');
 const EntryModel = require('./models/Entry.js');
-const  dotenv = require('dotenv')
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -65,22 +65,22 @@ const Entries = EntryModel(sequelize, Sequelize);
 
 // const getData = async (req, res, next) => {
 //   console.log('in get data dashboardcontroller')
-//   const userId = req.user.uid; 
+//   const userId = req.user.uid;
 //   try {
 //     const entries = await Entries.findAll({
 //       where: {
-//         userId: userId, 
+//         userId: userId,
 //         date: "2021-10-02"
-//       }, 
+//       },
 //       include: {
-//         model: Foods 
+//         model: Foods
 //       }
 //     })
-//     res.locals.entries = entries; 
+//     res.locals.entries = entries;
 //     console.log(entries);
 //     next()
 //   } catch(e) {
 //     return next(e)
 //   }
 // }
-module.exports = {db: sequelize, models: {Users,Foods,Entries}}
+module.exports = { db: sequelize, models: { Users, Foods, Entries } };
