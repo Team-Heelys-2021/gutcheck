@@ -76,6 +76,19 @@ entryController.getAllEntries = async (req, res, next) => {
   next();
 };
 
-entryController.deleteEntry = async (req, res, next) => {};
+entryController.deleteEntry = async (req, res, next) => {
+  const { entryId } = req.params;
+  try {
+    await Entries.destroy({
+      where: {
+        id: entryId,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+  res.status(204).json({ success: true });
+};
 
 module.exports = entryController;

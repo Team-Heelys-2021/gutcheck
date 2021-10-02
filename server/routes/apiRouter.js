@@ -3,6 +3,7 @@ const router = express.Router();
 const entryController = require('../controllers/entryController');
 const dashboardController = require('../controllers/dashboardController');
 
+router.delete('/entry/:entryId', entryController.deleteEntry);
 router.post(
   '/entry',
   entryController.verifyOrCreateFood,
