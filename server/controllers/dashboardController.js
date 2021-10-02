@@ -9,6 +9,9 @@ dashboardController.getData = async (req, res, next) => {
     where: {
       userId: userId, 
       date: today
+    },
+    group: {
+      
     }
   })
 }; 
