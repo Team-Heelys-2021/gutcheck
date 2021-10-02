@@ -22,8 +22,8 @@ router.get('/entry', entryController.getAllEntries, (req, res) => {
 });
 
 
-router.get('/dashboard', (req,res) => {
-  res.status(200).json({data : res.locals.data})
+router.get('/dashboard', dashboardController.getData, (req,res) => {
+  res.status(200).json(res.locals.data)
 })
 
 

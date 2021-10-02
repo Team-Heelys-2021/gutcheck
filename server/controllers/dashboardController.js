@@ -2,7 +2,6 @@ const {
   db,
   models: { Foods, Entries },
 } = require('../../sql/sequelize');
-const getDate = require('./entryController');
 
 const dashboardController = {};
 
@@ -12,7 +11,11 @@ dashboardController.getData = async (req, res, next) => {
     const data = []
     for (let i = 0; i < 7; i++) {
       const date = getAnyDay(i);
-      data.push(getEntries(date,userId));
+      const entries = await getEntries(date, userId)
+      if (entries) {
+        // console.log(entries)
+        data.push(entries)
+      }
     }
     res.locals.data = data;
     next();
@@ -22,6 +25,7 @@ dashboardController.getData = async (req, res, next) => {
   }
 };
 const getEntries = async (date,userId) => {
+  let formattedEntries = null
   try {
     const entries = await db.query(
       `SELECT * FROM "Entries", "Foods" WHERE "Entries"."date" = '${date}' AND "Foods"."fdcId" = "Entries"."foodId" AND "Entries"."userId" = '${userId}' `
@@ -36,22 +40,21 @@ const getEntries = async (date,userId) => {
     const count = await db.query(
       `SELECT COUNT(DISTINCT "foodId") FROM "Entries" WHERE "date" = '${date}' AND "userId" = '${userId}'`
     );
-    console.log('count', count[0]);
-    const formattedEntries = {
+    // console.log('count', count[0]);
+    formattedEntries = {
       date: date,
       foods: foods,
       count: count[0][0].count,
     };
-    res.locals.entries = formattedEntries;
   } catch (e) {
     console.log(e);
-    return next(e);
   }
+  return formattedEntries;
 };
 
 const getAnyDay = (n) => {
   let today = new Date();
-  const d = new Date(
+  let d = new Date(
     today.getFullYear(),
     today.getMonth(),
     today.getDate() - n
