@@ -10,9 +10,7 @@ dashboardController.getData = async (req, res, next) => {
       userId: userId, 
       date: today
     },
-    group: {
-      
-    }
+    group: 'date',
   })
 }; 
 

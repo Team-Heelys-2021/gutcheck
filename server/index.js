@@ -8,6 +8,8 @@ const authRouter = require('./auth/auth.routes');
 const userParser = require('./userParser');
 const apiRouter = require('./routes/apiRouter');
 
+const entryController = require('./controllers/entryController')
+
 const oktaJwtVerifier = new OktaJwtVerifier({
   clientId: process.env.OKTA_CLIENT_ID,
   issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
