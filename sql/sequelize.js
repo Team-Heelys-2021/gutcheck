@@ -62,4 +62,25 @@ const Entries = EntryModel(sequelize, Sequelize);
 //   console.log("All entries:", JSON.stringify(entries, null, 2));
 // }
 // createRecords();
+
+// const getData = async (req, res, next) => {
+//   console.log('in get data dashboardcontroller')
+//   const userId = req.user.uid; 
+//   try {
+//     const entries = await Entries.findAll({
+//       where: {
+//         userId: userId, 
+//         date: "2021-10-02"
+//       }, 
+//       include: {
+//         model: Foods 
+//       }
+//     })
+//     res.locals.entries = entries; 
+//     console.log(entries);
+//     next()
+//   } catch(e) {
+//     return next(e)
+//   }
+// }
 module.exports = {db: sequelize, models: {Users,Foods,Entries}}
