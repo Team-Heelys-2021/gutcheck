@@ -29,7 +29,7 @@ git clone https://github.com/team-axolotl2021/gutcheck.git
 yarn
 ```
 
-3. Run the dev server
+3. Run the dev server. (Note: Environment must be fully configured. See below.)
 
 ```sh
 yarn dev
