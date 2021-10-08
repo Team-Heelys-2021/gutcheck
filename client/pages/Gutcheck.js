@@ -3,12 +3,16 @@ import AppBar from '../components/AppBar';
 import EntryList from '../components/EntryList';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import { useHistory } from 'react-router-dom';
 import { useOktaAuth } from '@okta/okta-react';
 import axios from 'axios';
 import { useFoods } from '../hooks/useFoods';
 import { useAuth } from '../hooks/useAuth';
 import Thermometer from '../components/Thermometer';
+import BarChart from '../components/BarChart';
 
 const Gutcheck = () => {
   const [search, setSearch] = React.useState('');
@@ -17,6 +21,7 @@ const Gutcheck = () => {
   const history = useHistory();
   const { authState } = useOktaAuth();
   const { foodsList, doFoodsSearch } = useFoods();
+  const [data, setData] = React.useState(null)
   useAuth();
 
   if (authState && !authState.isAuthenticated) {
@@ -34,6 +39,7 @@ const Gutcheck = () => {
       axios.get('/api/entry').then(({ data: { entries } }) => {
         setEntries(entries);
       });
+      fetchDashboardData();
     }
   }, [authState]);
 
@@ -56,6 +62,7 @@ const Gutcheck = () => {
     const {
       data: { entryId },
     } = await axios.post('/api/entry', { food });
+    fetchDashboardData();
     return entryId;
   };
 
@@ -68,10 +75,16 @@ const Gutcheck = () => {
       await axios.delete(`/api/entry/${entryId}`);
       const newEntries = entries.filter((entry) => entry.entryId !== entryId);
       setEntries(newEntries);
+      fetchDashboardData();
     } catch (e) {
       console.log('An error occurred when deleting ', entryId);
     }
   };
+
+  const fetchDashboardData = async () => {
+    const { data } = await axios.get('/api/dashboard')
+    setData(data)
+  }
 
   const redirectToLogin = () => {
     history.push('/login');
@@ -83,6 +96,16 @@ const Gutcheck = () => {
 
   return (
     <div>
+      <Box>
+        <Container>
+          <Grid container> 
+            <Grid item xs={12}>
+            {data?.length && <BarChart entries={data} />}
+            </Grid>
+          </Grid>
+
+        </Container>
+      </Box>
       {/* <Link to="/protected">Protected</Link> */}
       <div className="grid-container">
         <div className="grid-item-1">
