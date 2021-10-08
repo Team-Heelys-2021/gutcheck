@@ -24,6 +24,22 @@ export default function ButtonAppBar() {
     history.replace('/');
   };
 
+  const toGutcheck = () => {
+    history.replace('/gutcheck');
+  };
+
+  const toMeditation = () => {
+    history.replace('/meditation');
+  };
+
+  const toExercise = () => {
+    history.replace('/exercise');
+  };
+
+  const toJournal = () => {
+    history.replace('/journal');
+  };
+
   return (
     <Box sx={{ flexGrow: 1, marginTop: 1 }}>
       <AppBar position="static" sx={{ borderRadius: '3px' }}>
@@ -38,8 +54,17 @@ export default function ButtonAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Button color="inherit" onClick={toHome}>
+            <Button color="inherit" onClick={toGutcheck}>
               Gutcheck
+            </Button>
+            <Button color="inherit" onClick={toMeditation}>
+              Meditation
+            </Button>
+            <Button color="inherit" onClick={toExercise}>
+              Exercise
+            </Button>
+            <Button color="inherit" onClick={toJournal}>
+              Journal
             </Button>
           </Typography>
           <Button color="inherit" onClick={toDashboard}>
