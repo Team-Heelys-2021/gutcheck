@@ -21,7 +21,7 @@ const Gutcheck = () => {
   const history = useHistory();
   const { authState } = useOktaAuth();
   const { foodsList, doFoodsSearch } = useFoods();
-  const [data, setData] = React.useState(null)
+  const [data, setData] = React.useState(null);
   useAuth();
 
   if (authState && !authState.isAuthenticated) {
@@ -82,65 +82,51 @@ const Gutcheck = () => {
   };
 
   const fetchDashboardData = async () => {
-    const { data } = await axios.get('/api/dashboard')
-    setData(data)
-  }
-
-  const redirectToLogin = () => {
-    history.push('/login');
+    const { data } = await axios.get('/api/dashboard');
+    setData(data);
   };
 
   if (!authState) return null;
 
-  const login = async () => history.push('/login');
-
   return (
     <div>
       <Box>
-        <Container>
-          <Grid container> 
-            <Grid item xs={12}>
+        <Grid container rowSpacing={2} columnSpacing={1}>
+          <Grid item xs={12}>
             {data?.length && <BarChart entries={data} />}
-            </Grid>
           </Grid>
-
-        </Container>
+          <Grid item xs={8}>
+            <Autocomplete
+              id="size-small-filled"
+              size="small"
+              clearOnBlur={true}
+              clearOnEscape={true}
+              options={foodsList}
+              getOptionLabel={(option) =>
+                `${option.description} ${
+                  option.brandName ? `(${option.brandName})` : ''
+                } - (${option.fdcId})`
+              }
+              onChange={(e, value) => setSelectedValue(value)}
+              value={selectedValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Size small"
+                  placeholder="Favorites"
+                  onChange={(e) => setSearch(e.target.value)}
+                  value={search}
+                />
+              )}
+            />
+            <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
+          </Grid>
+          <Grid item xs={4}>
+              <Thermometer entries={entries} />
+          </Grid>
+        </Grid> 
       </Box>
-      {/* <Link to="/protected">Protected</Link> */}
-      <div className="grid-container">
-        <div className="grid-item-1">
-          <Autocomplete
-            id="size-small-filled"
-            size="small"
-            clearOnBlur={true}
-            clearOnEscape={true}
-            options={foodsList}
-            getOptionLabel={(option) =>
-              `${option.description} ${
-                option.brandName ? `(${option.brandName})` : ''
-              } - (${option.fdcId})`
-            }
-            onChange={(e, value) => setSelectedValue(value)}
-            value={selectedValue}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="Size small"
-                placeholder="Favorites"
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-              />
-            )}
-          />
-        </div>
-        <div className="grid-item-2">
-          <Thermometer entries={entries} />
-        </div>
-        <div className="grid-item-3">
-          <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
-        </div>
-      </div>
     </div>
   );
 };
