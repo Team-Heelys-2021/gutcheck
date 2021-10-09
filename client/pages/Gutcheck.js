@@ -91,41 +91,43 @@ const Gutcheck = () => {
   return (
     <div>
       <Box>
-        <Grid container rowSpacing={2} columnSpacing={1}>
-          <Grid item xs={12}>
-            {data?.length && <BarChart entries={data} />}
-          </Grid>
-          <Grid item xs={8}>
-            <Autocomplete
-              id="size-small-filled"
-              size="small"
-              clearOnBlur={true}
-              clearOnEscape={true}
-              options={foodsList}
-              getOptionLabel={(option) =>
-                `${option.description} ${
-                  option.brandName ? `(${option.brandName})` : ''
-                } - (${option.fdcId})`
-              }
-              onChange={(e, value) => setSelectedValue(value)}
-              value={selectedValue}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Size small"
-                  placeholder="Favorites"
-                  onChange={(e) => setSearch(e.target.value)}
-                  value={search}
-                />
-              )}
-            />
-            <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
-          </Grid>
-          <Grid item xs={4}>
-              <Thermometer entries={entries} />
-          </Grid>
-        </Grid> 
+        <Container>
+          <Grid container rowSpacing={2} columnSpacing={1}>
+            <Grid item xs={12}>
+              {data?.length && <BarChart entries={data} />}
+            </Grid>
+            <Grid item xs={8}>
+              <Autocomplete
+                id="size-small-filled"
+                size="small"
+                clearOnBlur={true}
+                clearOnEscape={true}
+                options={foodsList}
+                getOptionLabel={(option) =>
+                  `${option.description} ${
+                    option.brandName ? `(${option.brandName})` : ''
+                  } - (${option.fdcId})`
+                }
+                onChange={(e, value) => setSelectedValue(value)}
+                value={selectedValue}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Size small"
+                    placeholder="Favorites"
+                    onChange={(e) => setSearch(e.target.value)}
+                    value={search}
+                  />
+                )}
+              />
+              <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
+            </Grid>
+            <Grid item xs={4}>
+                <Thermometer entries={entries} />
+            </Grid>
+          </Grid> 
+        </Container>
       </Box>
     </div>
   );
