@@ -78,7 +78,7 @@ const HorizontalBarChart = ({ entries }) => {
           justifyContent: 'center',
         }}
       >
-        <h3 className="title">My Progress</h3>
+        <h3 className="title">My Daily Progress</h3>
       </div>
       <Bar data={data} options={options} />
     </>
