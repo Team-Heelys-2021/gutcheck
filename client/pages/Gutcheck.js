@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import AppBar from '../components/AppBar';
 import EntryList from '../components/EntryList';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -13,28 +13,45 @@ import { useFoods } from '../hooks/useFoods';
 import { useAuth } from '../hooks/useAuth';
 import Thermometer from '../components/Thermometer';
 import BarChart from '../components/BarChart';
+import Calendar from '../components/Calendar.js';
 
 const Gutcheck = () => {
-  const [search, setSearch] = React.useState('');
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const [entries, setEntries] = React.useState([]);
+  const [search, setSearch] = useState('');
+  const [selectedValue, setSelectedValue] = useState(null);
+  const [entries, setEntries] = useState([]);
   const history = useHistory();
   const { authState } = useOktaAuth();
   const { foodsList, doFoodsSearch } = useFoods();
-  const [data, setData] = React.useState(null);
+  const [data, setData] = useState(null);
+  const [currentDay, setCurrentDay] = useState();
   useAuth();
 
   if (authState && !authState.isAuthenticated) {
     history.replace('/login');
   }
 
-  React.useEffect(() => {
+  useLayoutEffect(() => {
+    async function fetchMyApi() {
+      try {
+        const fetchedData = await axios.post('/api/dateOfEntry', {date: currentDay});   
+        const res = fetchedData;
+        setEntries(res.data.entries);
+      } catch(e) {
+        console.log(e)
+      }
+    };
+    if (currentDay !== undefined) {
+      fetchMyApi();
+    }
+  }, [currentDay])
+
+  useEffect(() => {
     if (search.length > 1) {
       searchFoods(search);
     }
   }, [search]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (authState?.isAuthenticated) {
       axios.get('/api/entry').then(({ data: { entries } }) => {
         setEntries(entries);
@@ -43,7 +60,7 @@ const Gutcheck = () => {
     }
   }, [authState]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedValue) {
       syncEntries(selectedValue).then((entryId) => {
         if (entryId) {
@@ -57,6 +74,13 @@ const Gutcheck = () => {
       });
     }
   }, [selectedValue]);
+
+  
+  function handleDayClick(day) {
+    if (day <= new Date()) {
+      setCurrentDay(day);
+    }
+  }
 
   const syncEntries = async (food) => {
     const {
@@ -93,8 +117,11 @@ const Gutcheck = () => {
       <Box>
         <Container>
           <Grid container rowSpacing={2} columnSpacing={1}>
-            <Grid item xs={12}>
+            <Grid item xs={8}>
               {data?.length && <BarChart entries={data} />}
+            </Grid>
+            <Grid item xs={4} id='gutcheck_calendar_container'>
+              <Calendar handleDayClick={handleDayClick}/>
             </Grid>
             <Grid item xs={8}>
               <Autocomplete

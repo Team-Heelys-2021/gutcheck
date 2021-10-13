@@ -18,8 +18,7 @@ const Journal = () => {
   // TODO: figure out whether useEffect is right tool for modal (onClick?) 
 
   function handleDayClick(day) {
-    const currentDay = new Date();
-    if (day <= currentDay) {
+    if (day <= new Date()) {
       setCurrentDay(day => day);
       console.log(day);
       // TODO: acces the correct journal entry from journalEntries based on the day
