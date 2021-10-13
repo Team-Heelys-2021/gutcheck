@@ -1,4 +1,5 @@
 const entryController = {};
+const { request } = require('express');
 const {
   db,
   models: { Foods, Entries },
@@ -64,11 +65,19 @@ entryController.createEntry = async (req, res, next) => {
 
 //TODO: get all the entries
 entryController.getAllEntries = async (req, res, next) => {
-  const today = getDate();
+  let date = null;
+
+  if (req.body.date) {
+    date = new Date(Date.parse(req.body.date));
+    date = date.toISOString().split('T')[0];
+  } else {
+    date = getDate();
+  }
+
   const userId = req.user.uid;
   try {
     const entries = await db.query(
-      `SELECT * FROM "Entries", "Foods" WHERE "Entries"."date" = '${today}' AND "Foods"."fdcId" = "Entries"."foodId" AND "Entries"."userId" = '${userId}' `
+      `SELECT * FROM "Entries", "Foods" WHERE "Entries"."date" = '${date}' AND "Foods"."fdcId" = "Entries"."foodId" AND "Entries"."userId" = '${userId}' `
     );
     const formattedEntries = entries[0].map((entry) => {
       const metaData = JSON.parse(entry.metaData);
