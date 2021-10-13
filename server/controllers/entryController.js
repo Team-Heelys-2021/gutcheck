@@ -15,12 +15,15 @@ const getDate = () => {
   return today;
 };
 
-
-
 entryController.verifyOrCreateFood = async (req, res, next) => {
-  const { fdcId, lowercaseDescription } = req.body.food;
+  const { fdcId, lowercaseDescription, foodNutrients } = req.body.food;
   const metaData = req.body.food;
   console.log(req.body);
+  let fiberValue = 0;
+  foodNutrients.forEach((s) => {
+    s.nutrientId == '1079' ? (fiberValue = s.value) : 0;
+  });
+  console.log('fiber Value', fiberValue);
   const food = await Foods.findOne({
     where: {
       fdcId: fdcId,
@@ -33,6 +36,7 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
       await Foods.create({
         fdcId: fdcId,
         foodName: lowercaseDescription,
+        fiberCount: fiberValue,
         metaData: JSON.stringify(metaData),
       });
     } catch (e) {
@@ -92,6 +96,5 @@ entryController.deleteEntry = async (req, res, next) => {
   }
   res.status(204).json({ success: true });
 };
-
 
 module.exports = entryController;
