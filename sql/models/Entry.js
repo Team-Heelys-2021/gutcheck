@@ -1,10 +1,10 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = function (sequelize, Datatypes) {
   //Entries Table
 
   const EntryModel = sequelize.define(
-    'Entries',
+    "Entries",
     {
       //Model attributes are defined here
       id: {
@@ -17,16 +17,12 @@ module.exports = function (sequelize, Datatypes) {
         defaultValue: DataTypes.NOW,
       },
       userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING, 
         allowNull: false,
       },
       foodId: {
-        type: DataTypes.INTEGER,
-      },
-      fiberCount: {
-        type: DataTypes.DOUBLE,
-        allowNull: true,
-      },
+        type: DataTypes.INTEGER, 
+      }
     },
     {
       freezeTableName: true,
