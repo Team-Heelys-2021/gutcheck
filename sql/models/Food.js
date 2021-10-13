@@ -1,10 +1,10 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
 module.exports = function (sequelize, Datatypes) {
   //Foods Model
 
   const FoodModel = sequelize.define(
-    "Foods",
+    'Foods',
     {
       //Model attributes are defined here
       fdcId: {
@@ -17,6 +17,10 @@ module.exports = function (sequelize, Datatypes) {
       },
       metaData: {
         type: DataTypes.JSON,
+        allowNull: true,
+      },
+      fiberCount: {
+        type: DataTypes.DOUBLE,
         allowNull: true,
       },
     },
