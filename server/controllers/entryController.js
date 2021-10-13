@@ -1,4 +1,5 @@
 const entryController = {};
+const { request } = require('express');
 const {
   db,
   models: { Foods, Entries },
@@ -15,12 +16,15 @@ const getDate = () => {
   return today;
 };
 
-
-
 entryController.verifyOrCreateFood = async (req, res, next) => {
-  const { fdcId, lowercaseDescription } = req.body.food;
+  const { fdcId, lowercaseDescription, foodNutrients } = req.body.food;
   const metaData = req.body.food;
   console.log(req.body);
+  let fiberValue = 0;
+  foodNutrients.forEach((s) => {
+    s.nutrientId == '1079' ? (fiberValue = s.value) : 0;
+  });
+  console.log('fiber Value', fiberValue);
   const food = await Foods.findOne({
     where: {
       fdcId: fdcId,
@@ -33,6 +37,7 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
       await Foods.create({
         fdcId: fdcId,
         foodName: lowercaseDescription,
+        fiberCount: fiberValue,
         metaData: JSON.stringify(metaData),
       });
     } catch (e) {
@@ -60,11 +65,19 @@ entryController.createEntry = async (req, res, next) => {
 
 //TODO: get all the entries
 entryController.getAllEntries = async (req, res, next) => {
-  const today = getDate();
+  let date = null;
+
+  if (req.body.date) {
+    date = new Date(Date.parse(req.body.date));
+    date = date.toISOString().split('T')[0];
+  } else {
+    date = getDate();
+  }
+
   const userId = req.user.uid;
   try {
     const entries = await db.query(
-      `SELECT * FROM "Entries", "Foods" WHERE "Entries"."date" = '${today}' AND "Foods"."fdcId" = "Entries"."foodId" AND "Entries"."userId" = '${userId}' `
+      `SELECT * FROM "Entries", "Foods" WHERE "Entries"."date" = '${date}' AND "Foods"."fdcId" = "Entries"."foodId" AND "Entries"."userId" = '${userId}' `
     );
     const formattedEntries = entries[0].map((entry) => {
       const metaData = JSON.parse(entry.metaData);
@@ -92,6 +105,5 @@ entryController.deleteEntry = async (req, res, next) => {
   }
   res.status(204).json({ success: true });
 };
-
 
 module.exports = entryController;
