@@ -3,14 +3,10 @@ import Auth from './pages/Auth';
 import { Route, Switch, useHistory, withRouter } from 'react-router-dom';
 import { Security, LoginCallback } from '@okta/okta-react';
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
-import './index.scss';
-//import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
-import AppBar from './components/AppBar';
-import Gutcheck from './pages/Gutcheck';
-import Journal from './pages/Journal';
-import Meditation from './pages/Meditation';
-import Exercise from './pages/Exercise';
+
+import './index.scss';
+import Home from './pages/Home';
 
 function App() {
   const history = useHistory();
@@ -43,24 +39,7 @@ function App() {
           </Route>
           <Route path="/dashboard" component={Dashboard} />
           <Route exact path="/">
-            <AppBar />
-            <Gutcheck />
-          </Route>
-          <Route exact path="/gutcheck">
-            <AppBar />
-            <Gutcheck />
-          </Route>
-          <Route exact path="/exercise">
-            <AppBar />
-            <Exercise />
-          </Route>
-          <Route exact path="/journal">
-            <AppBar />
-            <Journal />
-          </Route>
-          <Route exact path="/meditation">
-            <AppBar />
-            <Meditation />
+            <Home />
           </Route>
         </Switch>
       </Security>
