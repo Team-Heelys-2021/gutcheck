@@ -70,6 +70,9 @@
   height: 400px;
 }
 
-.t {
-  top-padding: 5px;
+
+.page_calendar_container {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
 }
