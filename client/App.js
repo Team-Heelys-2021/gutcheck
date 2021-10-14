@@ -17,7 +17,7 @@ import beachImg from './img/beach.jpg';
 const styles = {
   paperContainer: {
      height: "100%",
-     width: "100",
+     //width: "100",
     //height: 800,
     backgroundImage: `url(${beachImg})`,
     // backgroundSize: 'cover',
