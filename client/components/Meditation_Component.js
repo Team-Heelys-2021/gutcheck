@@ -2,13 +2,9 @@ import React, { useState, useReducer } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
-import Countdown from 'react-countdown';
-import Timer from './Timer.js'
-// import Item from '@mui/material/Item';
+import Timer from './Timer.js';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -27,7 +23,7 @@ export default function Meditation_Component() {
     }
 
     return (
-      <Grid>
+        <Grid>
             <Stack direction="row" spacing={6} alignItems="center" justifyContent="center">
               <Button variant="contained" onClick={() => {setDurationInMinutes(0.1) }}>1 minute</Button>
               <Button variant="contained" onClick={() => {setDurationInMinutes(3) }}>3 minutes</Button>
@@ -37,7 +33,7 @@ export default function Meditation_Component() {
             <Stack direction="row" alignItems="center" justifyContent="center" pt={6}>
               <Timer durationInSeconds={durationInSeconds} />
             </Stack>
-      </Grid>
+        </Grid>
       )
     };
 

@@ -11,6 +11,29 @@ import Gutcheck from './pages/Gutcheck';
 import Journal from './pages/Journal';
 import Meditation from './pages/Meditation';
 import Exercise from './pages/Exercise';
+import Paper from '@mui/material/Paper';
+import beachImg from './img/beach.jpg';
+
+const styles = {
+  paperContainer: {
+     height: "100%",
+     width: "100",
+    //height: 800,
+    backgroundImage: `url(${beachImg})`,
+    // backgroundSize: 'cover',
+    // backgroundPosition: 'cover',
+    //width: `calc(100vw + 48px)`,
+    // margin: -24,
+    // padding: 24,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
+    backgroundSize: "cover",
+    backgroundAttachment: "fixed",
+    // height: "100%"
+  },
+};
+
+
 
 function App() {
   const history = useHistory();
@@ -59,8 +82,10 @@ function App() {
             <Journal />
           </Route>
           <Route exact path="/meditation">
-            <AppBar />
-            <Meditation />
+            <Paper style={styles.paperContainer}>
+              <AppBar />
+              <Meditation />
+            </Paper>
           </Route>
         </Switch>
       </Security>
