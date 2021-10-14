@@ -79,6 +79,7 @@ const Gutcheck = () => {
   function handleDayClick(day) {
     if (day <= new Date()) {
       setCurrentDay(day);
+      console.log(day)
     }
   }
 

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Calendar from '../components/Calendar.js';
 import CalendarModal from '../components/CalendarModal.js';
+import axios from 'axios';
 
 const Journal = () => {
   const [currentDay, setCurrentDay] = useState(new Date());
@@ -8,14 +9,19 @@ const Journal = () => {
 
   useEffect(() => {
     async function fetchMyApi() {
-      const fetchedData = await fetch('');
-      const res = await fetchedData.json();
-      setJournalEntries(res);
+      try {
+        const fetchedData = await axios.post('/api/dateOfEntry', {date: currentDay});   
+        const res = fetchedData;
+        setEntries(res.data.entries);
+      } catch(e) {
+        console.log(e)
+      }
+    };
+    if (currentDay !== undefined) {
+      fetchMyApi();
     }
-    fetchMyApi();
-  }, []);
+  }, [currentDay]);
 
-  // TODO: figure out whether useEffect is right tool for modal (onClick?) 
 
   function handleDayClick(day) {
     if (day <= new Date()) {
