@@ -25,16 +25,17 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
     s.nutrientId == '1079' ? (fiberValue = s.value) : 0;
   });
   console.log('fiber Value', fiberValue);
-  const food = await Foods.findOne({
+  let food = await Foods.findOne({
     where: {
       fdcId: fdcId,
     },
   });
   //if food doesn't exist in the database, create the food in db
+  console.log('food:', food);
 
   if (!food) {
     try {
-      await Foods.create({
+      food = await Foods.create({
         fdcId: fdcId,
         foodName: lowercaseDescription,
         fiberCount: fiberValue,
@@ -43,8 +44,11 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
     } catch (e) {
       return next(e);
     }
+  } else {
+    fiberValue = food.fiberValue;
   }
   res.locals.foodFdcId = fdcId;
+  res.locals.fiberCount = fiberValue;
   next();
 };
 
@@ -55,6 +59,7 @@ entryController.createEntry = async (req, res, next) => {
     const entry = await Entries.create({
       userId: uid,
       foodId: res.locals.foodFdcId,
+      fiberCount: res.locals.fiberCount,
     });
     res.locals.entryId = entry.id;
   } catch (e) {
