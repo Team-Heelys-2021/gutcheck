@@ -19,13 +19,13 @@ const getDate = () => {
 entryController.verifyOrCreateFood = async (req, res, next) => {
   const { fdcId, lowercaseDescription, foodNutrients } = req.body.food;
   const metaData = req.body.food;
-  console.log(req.body);
+  console.log('request body:', req.body);
   let fiberValue = 0;
   foodNutrients.forEach((s) => {
     s.nutrientId == '1079' ? (fiberValue = s.value) : 0;
   });
-  console.log('fiber Value', fiberValue);
-  const food = await Foods.findOne({
+
+  let food = await Foods.findOne({
     where: {
       fdcId: fdcId,
     },
@@ -34,7 +34,7 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
 
   if (!food) {
     try {
-      await Foods.create({
+      food = await Foods.create({
         fdcId: fdcId,
         foodName: lowercaseDescription,
         fiberCount: fiberValue,
@@ -43,8 +43,11 @@ entryController.verifyOrCreateFood = async (req, res, next) => {
     } catch (e) {
       return next(e);
     }
+  } else {
+    fiberValue = food.fiberValue;
   }
   res.locals.foodFdcId = fdcId;
+  res.locals.fiberCount = fiberValue;
   next();
 };
 
@@ -55,6 +58,8 @@ entryController.createEntry = async (req, res, next) => {
     const entry = await Entries.create({
       userId: uid,
       foodId: res.locals.foodFdcId,
+      fiberCount: res.locals.fiberCount,
+      date: req.body.date,
     });
     res.locals.entryId = entry.id;
   } catch (e) {

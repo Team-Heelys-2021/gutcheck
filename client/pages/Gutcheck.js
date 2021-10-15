@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import AppBar from '../components/AppBar';
 import EntryList from '../components/EntryList';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -23,7 +23,7 @@ const Gutcheck = () => {
   const { authState } = useOktaAuth();
   const { foodsList, doFoodsSearch } = useFoods();
   const [data, setData] = useState(null);
-  const [currentDay, setCurrentDay] = useState();
+  const [currentDate, setcurrentDate] = useState();
   useAuth();
 
   if (authState && !authState.isAuthenticated) {
@@ -33,17 +33,19 @@ const Gutcheck = () => {
   useLayoutEffect(() => {
     async function fetchMyApi() {
       try {
-        const fetchedData = await axios.post('/api/dateOfEntry', {date: currentDay});   
+        const fetchedData = await axios.post('/api/dateOfEntry', {
+          date: currentDate,
+        });
         const res = fetchedData;
         setEntries(res.data.entries);
-      } catch(e) {
-        console.log(e)
+      } catch (e) {
+        console.log(e);
       }
-    };
-    if (currentDay !== undefined) {
+    }
+    if (currentDate !== undefined) {
       fetchMyApi();
     }
-  }, [currentDay])
+  }, [currentDate]);
 
   useEffect(() => {
     if (search.length > 1) {
@@ -75,17 +77,20 @@ const Gutcheck = () => {
     }
   }, [selectedValue]);
 
-  
   function handleDayClick(day) {
     if (day <= new Date()) {
-      setCurrentDay(day);
+      setcurrentDate(day);
     }
   }
 
   const syncEntries = async (food) => {
+    const reqBody = { food }
+    if (currentDate) {
+      reqBody['date'] = currentDate;
+    }
     const {
       data: { entryId },
-    } = await axios.post('/api/entry', { food });
+    } = await axios.post('/api/entry', reqBody);
     fetchDashboardData();
     return entryId;
   };
@@ -120,8 +125,8 @@ const Gutcheck = () => {
             <Grid item xs={8}>
               {data?.length && <BarChart entries={data} />}
             </Grid>
-            <Grid item xs={4} id='gutcheck_calendar_container'>
-              <Calendar handleDayClick={handleDayClick}/>
+            <Grid item xs={4} id="calendar_container">
+              <Calendar handleDayClick={handleDayClick} />
             </Grid>
             <Grid item xs={8}>
               <Autocomplete
@@ -151,9 +156,9 @@ const Gutcheck = () => {
               <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
             </Grid>
             <Grid item xs={4}>
-                <Thermometer entries={entries} />
+              <Thermometer entries={entries} />
             </Grid>
-          </Grid> 
+          </Grid>
         </Container>
       </Box>
     </div>
