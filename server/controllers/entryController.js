@@ -19,19 +19,18 @@ const getDate = () => {
 entryController.verifyOrCreateFood = async (req, res, next) => {
   const { fdcId, lowercaseDescription, foodNutrients } = req.body.food;
   const metaData = req.body.food;
-  console.log(req.body);
+  console.log('request body:', req.body);
   let fiberValue = 0;
   foodNutrients.forEach((s) => {
     s.nutrientId == '1079' ? (fiberValue = s.value) : 0;
   });
-  console.log('fiber Value', fiberValue);
+
   let food = await Foods.findOne({
     where: {
       fdcId: fdcId,
     },
   });
   //if food doesn't exist in the database, create the food in db
-  console.log('food:', food);
 
   if (!food) {
     try {
@@ -60,6 +59,7 @@ entryController.createEntry = async (req, res, next) => {
       userId: uid,
       foodId: res.locals.foodFdcId,
       fiberCount: res.locals.fiberCount,
+      date: req.body.date,
     });
     res.locals.entryId = entry.id;
   } catch (e) {
