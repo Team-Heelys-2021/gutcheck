@@ -1,34 +1,47 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
+
 import Calendar from '../components/Calendar.js';
-import CalendarModal from '../components/CalendarModal.js';
+import RichTextEditor from '../components/RichTextEditor.js';
+
 
 const Journal = () => {
-  const [currentDay, setCurrentDay] = useState(new Date());
-  const [journalEntries, setJournalEntries] = useState([]);
+  const [currentDate, setcurrentDate] = useState(new Date());
+  const [journalEntries, setJournalEntries] = useState({});
 
-  useEffect(() => {
-    async function fetchMyApi() {
-      const fetchedData = await fetch('');
-      const res = await fetchedData.json();
-      setJournalEntries(res);
-    }
-    fetchMyApi();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchMyApi() {
+  //     const fetchedData = await fetch('');
+  //     const res = await fetchedData.json();
+  //     setJournalEntries(res);
+  //   }
+  //   fetchMyApi();
+  // }, []);
 
-  // TODO: figure out whether useEffect is right tool for modal (onClick?) 
 
   function handleDayClick(day) {
     if (day <= new Date()) {
-      setCurrentDay(day => day);
-      console.log(day);
-      // TODO: acces the correct journal entry from journalEntries based on the day
+      setcurrentDate(day);
     }
   }
-  
-  return <div className='page_calendar_container'>
-    <p>Journal Page</p>
-    <CalendarModal/>
-    <Calendar handleDayClick={handleDayClick}/>
-  </div>
+
+  return (
+    <div>
+      <Box> 
+        <Container>
+          <Grid container rowSpacing={2}>
+            <Grid item xs={8}> 
+              <RichTextEditor />
+            </Grid>
+            <Grid item xs={4} id="calendar_container"> 
+              <Calendar handleDayClick={handleDayClick} selectedDay={currentDate} />
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    </div>
+  );
 };
 export default Journal;

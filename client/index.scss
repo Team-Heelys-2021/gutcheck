@@ -77,7 +77,11 @@
   margin: 1rem;
 }
 
-#gutcheck_calendar_container {
+#calendar_container {
   display: flex;
   justify-content: center;
+}
+
+.MuiContainer-root {
+  margin-top: 20px;
 }

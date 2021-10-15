@@ -125,7 +125,7 @@ const Gutcheck = () => {
             <Grid item xs={8}>
               {data?.length && <BarChart entries={data} />}
             </Grid>
-            <Grid item xs={4} id="gutcheck_calendar_container">
+            <Grid item xs={4} id="calendar_container">
               <Calendar handleDayClick={handleDayClick} />
             </Grid>
             <Grid item xs={8}>
