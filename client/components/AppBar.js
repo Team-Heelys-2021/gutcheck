@@ -11,6 +11,9 @@ import FoodBankIcon from '@mui/icons-material/FoodBank';
 import WavesIcon from '@mui/icons-material/Waves';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import BookIcon from '@mui/icons-material/Book';
+import MapIcon from '@mui/icons-material/Map';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import { useOktaAuth } from '@okta/okta-react';
 import DashboardIcon from '@mui/icons-material/DashboardOutlined';
@@ -57,8 +60,8 @@ export default function ButtonAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Healthcheck?
+          <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontFamily: 'Shadows Into Light' }}>
+            MeTime
           </Typography>
             <Button color="inherit" onClick={toGutcheck}>
               Gutcheck
@@ -69,8 +72,8 @@ export default function ButtonAppBar() {
               <WavesIcon sx={{ml: 1}} />
             </Button>
             <Button color="inherit" onClick={toExercise}>
-              Exercise
-              <DirectionsRunIcon sx={{ml: 1}} />
+              Happy Places
+              <MapIcon sx={{ml: 1}} />
             </Button>
             <Button color="inherit" onClick={toJournal}>
               Journal

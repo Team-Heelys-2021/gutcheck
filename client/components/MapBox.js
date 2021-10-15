@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useLayoutEffect, useRef} from 'react';
+import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'
 // import 'mapbox-gl.css'
@@ -13,6 +14,22 @@ export default function MapBox() {
   const [markers, setMarkers] = useState([]);
   let myMap;
 
+  function handleMapMarkerClick(e) {
+    const lng = e.lngLat.lng;
+    const lat = e.lngLat.lat;
+    const marker = new mapboxgl.Marker({
+              draggable: true, 
+              clickTolerance: 10
+            })
+            .setLngLat([lng, lat]) //longitude and latitude
+            .addTo(myMap)
+    marker.getElement().addEventListener('click', function (e) {
+      e.stopPropagation();
+      marker.remove();
+    })
+    setMarkers([...markers, marker]);
+  }
+
   useLayoutEffect(() => {
     myMap = new mapboxgl.Map({
         container: map.current, // matches <div id="map" />
@@ -23,18 +40,15 @@ export default function MapBox() {
 
     myMap.addControl(new mapboxgl.NavigationControl());
 
-    // const marker = new mapboxgl.Marker()
-    //         .setLngLat([-117.4912, 34.5]) //longitude and latitude
-    //         .addTo(myMap)
-    
+    myMap.on('click', (e) => {
+      // console.log(e.lngLat)
+      handleMapMarkerClick(e);
+    })
   }, []);
 
-    const handleMarkerClick = () => {
 
-    }
 
     return (
       <div id="map" className='map-container' ref={map}></div>
-      
     );
 }
