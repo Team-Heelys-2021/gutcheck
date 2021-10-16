@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-
-// import Item from '@mui/material/Item';
+import Timer from './Timer.js';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -20,21 +18,16 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Meditation_Component() {
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-            <Button variant="contained" href="#contained-buttons">Link</Button>
-            </Grid>
-            <Grid item xs={4}>
-              <Item>xs=4</Item>
-            </Grid>
-            <Grid item xs={4}>
-              <Item>xs=4</Item>
-            </Grid>
-            <Grid item xs={8}>
-              <Item>xs=8</Item>
-            </Grid>
-          </Grid>
-        </Box>
+        <Grid>
+            <Stack direction="row" spacing={6} alignItems="center" justifyContent="center">
+              <Button variant="contained" onClick={() => {setDurationInMinutes(0.1) }}>1 minute</Button>
+              <Button variant="contained" onClick={() => {setDurationInMinutes(3) }}>3 minutes</Button>
+              <Button variant="contained" onClick={() => {setDurationInMinutes(5) }}>5 minutes</Button>
+              <Button variant="contained" onClick={() => {setDurationInMinutes(10) }}>10 minutes</Button>
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="center" pt={6}>
+              <Timer durationInSeconds={durationInSeconds} />
+            </Stack>
+        </Grid>
       )
     };

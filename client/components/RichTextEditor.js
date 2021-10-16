@@ -1,5 +1,6 @@
 import React from "react";
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from "draft-js";
+import Button from '@mui/material/Button';
+import { Editor, EditorState, RichUtils, getDefaultKeyBinding, convertFromRaw, convertToRaw } from "draft-js";
 import "./RichTextEditor.css";
 import 'draft-js/dist/Draft.css';
 
@@ -7,14 +8,24 @@ class RichTextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {editorState: EditorState.createEmpty()};
-
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
-
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
     this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+  }
+
+  componentWillReceiveProps(newProps){
+    if (newProps.initContent) {
+      this.setState({
+        editorState: EditorState.createWithContent(convertFromRaw(newProps.initContent)),
+      })
+    } else {
+      this.setState({
+        editorState: EditorState.createEmpty(),
+      })
+    }
   }
 
   _handleKeyCommand(command, editorState) {
@@ -59,6 +70,12 @@ class RichTextEditor extends React.Component {
     );
   }
 
+  saveContent = () => {
+      const contentRaw = convertToRaw(this.state.editorState.getCurrentContent());
+      this.props.updateContent(contentRaw);
+  };
+
+
   render() {
     const {editorState} = this.state;
 
@@ -90,11 +107,14 @@ class RichTextEditor extends React.Component {
             handleKeyCommand={this.handleKeyCommand}
             keyBindingFn={this.mapKeyToEditorCommand}
             onChange={this.onChange}
-            placeholder="Tell a story..."
+            placeholder= "Journal your thoughts, share a story..."
             ref="editor"
             spellCheck={true}
           />
         </div>
+        <Button onClick={this.saveContent}> 
+          Save
+        </Button>
       </div>
     );
   }

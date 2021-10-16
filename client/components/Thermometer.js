@@ -1,7 +1,8 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const HorizontalBarChart = ({ entries }) => {
+const HorizontalBarChart = (props) => {
+  const { entries, currentDate } = props;
   const [color, setColor] = React.useState('rgba(255, 99, 132, 1)');
 
   React.useEffect(() => {
@@ -21,7 +22,7 @@ const HorizontalBarChart = ({ entries }) => {
   }, [entries]);
 
   const data = {
-    labels: [new Date().toLocaleString('en-US')],
+    labels: [currentDate],
     datasets: [
       {
         label: '',
