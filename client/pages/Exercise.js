@@ -3,7 +3,7 @@ import MapBox from '../components/MapBox.js';
 
 const Exercise = () => {
   return <>
-    <p>Exercise Page</p>
+    <h1 className="title" id='happyPlace-title'>My Happy Places</h1>
     <MapBox/>
   </>
 };

@@ -35,10 +35,12 @@ export default function MapBox() {
         container: map.current, // matches <div id="map" />
         style: 'mapbox://styles/mapbox/dark-v10', // sets the dark mode
         center: [-118.4912, 34.0195], 
-        zoom: 9,
+        zoom: 14,
     })
 
     myMap.addControl(new mapboxgl.NavigationControl());
+
+  
 
     myMap.on('click', (e) => {
       // console.log(e.lngLat)
@@ -49,6 +51,6 @@ export default function MapBox() {
 
 
     return (
-      <div id="map" className='map-container' ref={map}></div>
+        <div id="map" className='map-container' ref={map}></div>
     );
 }
