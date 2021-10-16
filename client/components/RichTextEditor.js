@@ -16,6 +16,18 @@ class RichTextEditor extends React.Component {
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
   }
 
+  componentWillReceiveProps(newProps){
+    if (newProps.initContent) {
+      this.setState({
+        editorState: EditorState.createWithContent(convertFromRaw(newProps.initContent)),
+      })
+    } else {
+      this.setState({
+        editorState: EditorState.createEmpty(),
+      })
+    }
+  }
+
   _handleKeyCommand(command, editorState) {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
@@ -66,6 +78,7 @@ class RichTextEditor extends React.Component {
 
   render() {
     const {editorState} = this.state;
+
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
@@ -94,7 +107,7 @@ class RichTextEditor extends React.Component {
             handleKeyCommand={this.handleKeyCommand}
             keyBindingFn={this.mapKeyToEditorCommand}
             onChange={this.onChange}
-            placeholder="Tell a story..."
+            placeholder= "Journal your thoughts, share a story..."
             ref="editor"
             spellCheck={true}
           />

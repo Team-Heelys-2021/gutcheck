@@ -23,7 +23,7 @@ const Gutcheck = () => {
   const { authState } = useOktaAuth();
   const { foodsList, doFoodsSearch } = useFoods();
   const [data, setData] = useState(null);
-  const [currentDate, setcurrentDate] = useState();
+  const [currentDate, setcurrentDate] = useState(new Date());
   useAuth();
 
   if (authState && !authState.isAuthenticated) {
@@ -158,7 +158,7 @@ const Gutcheck = () => {
               <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
             </Grid>
             <Grid item xs={4}>
-              <Thermometer entries={entries} />
+              <Thermometer entries={entries} currentDate={currentDate.toLocaleString('en-US')}/>
             </Grid>
           </Grid>
         </Container>

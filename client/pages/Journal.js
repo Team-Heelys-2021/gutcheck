@@ -8,11 +8,10 @@ import axios from 'axios';
 import Calendar from '../components/Calendar.js';
 import RichTextEditor from '../components/RichTextEditor.js';
 
-
 const Journal = () => {
   const [currentDate, setcurrentDate] = useState(new Date());
   const [journalContent, setJournalContent] = useState();
-  const [initContent, setInitContent] = useState({});
+  const [initContent, setInitContent] = useState();
   const { authState } = useOktaAuth();
   useAuth();
 
@@ -21,43 +20,43 @@ const Journal = () => {
   }
 
   useEffect(() => {
-    if (authState?.isAuthenticated && journalContent){
-      console.log('currContent: ', journalContent)
+    if (authState?.isAuthenticated && journalContent) {
+      console.log('currContent: ', journalContent);
       const reqBody = {
         date: currentDate,
         content: JSON.stringify(journalContent),
-      }
+      };
       axios.post('/api/createJournalEntry', reqBody).then((res) => {
-        console.log('pust entry: ', res)
-      })
-
+        console.log('post entry: ', res);
+        if (res.data.journalEntry != null) {
+          const fetchedContent = JSON.parse(res.data.journalEntry.content);
+          setInitContent(fetchedContent);
+        }
+      });
     }
-  }, [journalContent])
-
+  }, [journalContent]);
 
   useEffect(() => {
     if (authState?.isAuthenticated) {
+      console.log('first useEffect')
       const formattedDate = currentDate.toISOString().split('T')[0];
-      axios.get('/api/journalEntry/' + formattedDate).then((res)=> {
+      axios.get('/api/journalEntry/' + formattedDate).then((res) => {
         console.log('date: ', formattedDate);
-        console.log('entry: ', res)
-      })
+        console.log('entry: ', res);
+        if (res.data.journalEntry != null) {
+          const fetchedContent = JSON.parse(res.data.journalEntry.content);
+          console.log('content: ', fetchedContent);
+          setInitContent(fetchedContent);
+        } else {
+          setInitContent(undefined);
+        }
+      });
     }
-  }, [currentDate])
-
-  // useEffect(() => {
-  //   async function fetchMyApi() {
-  //     const fetchedData = await fetch('');
-  //     const res = await fetchedData.json();
-  //     setJournalEntries(res);
-  //   }
-  //   fetchMyApi();
-  // }, []);
-
+  }, [currentDate]);
 
   function handleDayClick(day) {
     const today = new Date();
-    const tomorrow =  new Date(today.getTime() + (24 * 60 * 60 * 1000));
+    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
     if (day < tomorrow) {
       setcurrentDate(day);
     }
@@ -65,14 +64,21 @@ const Journal = () => {
 
   return (
     <div>
-      <Box> 
+      <Box>
         <Container>
           <Grid container rowSpacing={2}>
-            <Grid item xs={8}> 
-              <RichTextEditor currentDate={currentDate} updateContent={setJournalContent} />
+            <Grid item xs={8}>
+              <RichTextEditor
+                currentDate={currentDate}
+                updateContent={setJournalContent}
+                initContent={initContent}
+              />
             </Grid>
-            <Grid item xs={4} id="calendar_container"> 
-              <Calendar handleDayClick={handleDayClick} selectedDay={currentDate} />
+            <Grid item xs={4} id="calendar_container">
+              <Calendar
+                handleDayClick={handleDayClick}
+                selectedDay={currentDate}
+              />
             </Grid>
           </Grid>
         </Container>
