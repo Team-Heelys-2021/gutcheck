@@ -12,7 +12,7 @@ const Zen = () => {
   }
 
   return (
-    <>
+    <div>
       <Grid container pt={15} justifyContent="center">
         <Button variant="contained" size="large" onClick={onPulseClick}>
           Breathe.
@@ -21,7 +21,7 @@ const Zen = () => {
       {/* <Meditation_Component /> */}
       {isPulsing && <Pulse />}
       {/* {!isPulsing && <StillCircle/>} */}
-    </>
+    </div>
   );
 };
 
