@@ -33,11 +33,13 @@ const styles = {
   },
 };
 
-function App() {
+function App(props) {
   const history = useHistory();
   const onAuthRequired = () => {
     history.push('/login');
   };
+
+  const {toggleColorTheme} = props;
 
   const oktaAuth = new OktaAuth({
     issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
@@ -64,23 +66,23 @@ function App() {
           </Route>
           <Route path="/dashboard" component={Dashboard} />
           <Route exact path="/">
-            <AppBar />
+            <AppBar toggleColorTheme={toggleColorTheme}/>
             <Gutcheck />
           </Route>
           <Route exact path="/gutcheck">
-            <AppBar />
+            <AppBar toggleColorTheme={toggleColorTheme}/>
             <Gutcheck />
           </Route>
           <Route exact path="/exercise">
-            <AppBar />
+            <AppBar toggleColorTheme={toggleColorTheme}/>
             <Exercise />
           </Route>
           <Route exact path="/journal">
-            <AppBar />
+            <AppBar toggleColorTheme={toggleColorTheme}/>
             <Journal />
           </Route>
           <Route exact path="/meditation">
-            <AppBar />
+            <AppBar toggleColorTheme={toggleColorTheme}/>
             <Container>
               <Meditation />
             </Container>

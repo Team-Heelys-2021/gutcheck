@@ -15,14 +15,16 @@ import MapIcon from '@mui/icons-material/Map';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import StripeButton from './StripeButton.js';
+import Brightness4 from '@mui/icons-material/Brightness4';
 
 import { useOktaAuth } from '@okta/okta-react';
 import DashboardIcon from '@mui/icons-material/DashboardOutlined';
 import { useHistory } from 'react-router-dom';
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
   const { oktaAuth } = useOktaAuth();
   const logout = async () => oktaAuth.signOut();
+  const {toggleColorTheme} = props;
 
   let history = useHistory();
   const toDashboard = () => {
@@ -52,15 +54,18 @@ export default function ButtonAppBar() {
   return (
       <AppBar position="static">
         <Toolbar variant="dense">
-          <IconButton
-            size="large"
-            edge="start"
+          <Button
+            // size="large"
+            // edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
+            sx={{ m1: 1 }}
           >
             <StripeButton/>
-          </IconButton>
+          </Button>
+          <Button color="inherit" onClick={toggleColorTheme}>
+            <Brightness4 sx={{ml: 1}}/>
+          </Button>
           <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontFamily: 'Shadows Into Light' }}>
             MeTime
           </Typography>
