@@ -29,5 +29,5 @@ module.exports = function (sequelize, Datatypes) {
       freezeTableName: true,
     }
   );
-  return EntryModel;
+  return JournalEntryModel;
 };

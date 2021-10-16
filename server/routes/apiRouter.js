@@ -33,6 +33,10 @@ router.post('/dateofEntry', entryController.getAllEntries, (req, res) => {
 
 router.get('/journalEntry/:date', journalController.getJournalEntry, (req, res) => {
   res.status(200).json({journalEntry: res.locals.journalEntry});
-})
+});
+
+router.post('/createJournalEntry', journalController.createJournalEntry, (req, res) => {
+  res.status(200).json({journalEntry: res.locals.journalEntry});
+});
 
 module.exports = router;

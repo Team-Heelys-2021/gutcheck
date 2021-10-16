@@ -1,5 +1,6 @@
 import React from "react";
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from "draft-js";
+import Button from '@mui/material/Button';
+import { Editor, EditorState, RichUtils, getDefaultKeyBinding, convertFromRaw, convertToRaw } from "draft-js";
 import "./RichTextEditor.css";
 import 'draft-js/dist/Draft.css';
 
@@ -7,10 +8,8 @@ class RichTextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {editorState: EditorState.createEmpty()};
-
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
-
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
     this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
     this.toggleBlockType = this._toggleBlockType.bind(this);
@@ -59,9 +58,14 @@ class RichTextEditor extends React.Component {
     );
   }
 
+  saveContent = () => {
+      const contentRaw = convertToRaw(this.state.editorState.getCurrentContent());
+      this.props.updateContent(contentRaw);
+  };
+
+
   render() {
     const {editorState} = this.state;
-
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
@@ -95,6 +99,9 @@ class RichTextEditor extends React.Component {
             spellCheck={true}
           />
         </div>
+        <Button onClick={this.saveContent}> 
+          Save
+        </Button>
       </div>
     );
   }
