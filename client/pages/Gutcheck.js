@@ -23,7 +23,7 @@ const Gutcheck = () => {
   const { authState } = useOktaAuth();
   const { foodsList, doFoodsSearch } = useFoods();
   const [data, setData] = useState(null);
-  const [currentDate, setcurrentDate] = useState();
+  const [currentDate, setcurrentDate] = useState(new Date());
   useAuth();
 
   if (authState && !authState.isAuthenticated) {
@@ -78,7 +78,9 @@ const Gutcheck = () => {
   }, [selectedValue]);
 
   function handleDayClick(day) {
-    if (day <= new Date()) {
+    const today = new Date();
+    const tomorrow =  new Date(today.getTime() + (24 * 60 * 60 * 1000));
+    if (day < tomorrow) {
       setcurrentDate(day);
     }
   }
@@ -126,7 +128,7 @@ const Gutcheck = () => {
               {data?.length && <BarChart entries={data} />}
             </Grid>
             <Grid item xs={4} id="calendar_container">
-              <Calendar handleDayClick={handleDayClick} />
+              <Calendar handleDayClick={handleDayClick} selectedDay={currentDate}/>
             </Grid>
             <Grid item xs={8}>
               <Autocomplete
@@ -156,7 +158,7 @@ const Gutcheck = () => {
               <EntryList entries={entries} deleteEntry={handleDeleteEntry} />
             </Grid>
             <Grid item xs={4}>
-              <Thermometer entries={entries} />
+              <Thermometer entries={entries} currentDate={currentDate.toLocaleString('en-US')}/>
             </Grid>
           </Grid>
         </Container>

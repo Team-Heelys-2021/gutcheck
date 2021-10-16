@@ -2,6 +2,7 @@ const { Sequelize } = require('sequelize');
 const UserModel = require('./models/User.js');
 const FoodModel = require('./models/Food.js');
 const EntryModel = require('./models/Entry.js');
+const JournalEntryModel = require('./models/JournalEntry.js');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -12,6 +13,8 @@ const sequelize = new Sequelize(process.env.PG_URL, { dialect: 'postgres' });
 const Users = UserModel(sequelize, Sequelize);
 const Foods = FoodModel(sequelize, Sequelize);
 const Entries = EntryModel(sequelize, Sequelize);
+const JournalEntries = JournalEntryModel(sequelize, Sequelize);
+
 //testing connection
 // async function testConnection() {
 //   try {
@@ -83,4 +86,4 @@ const Entries = EntryModel(sequelize, Sequelize);
 //     return next(e)
 //   }
 // }
-module.exports = { db: sequelize, models: { Users, Foods, Entries } };
+module.exports = { db: sequelize, models: { Users, Foods, Entries, JournalEntries} };
