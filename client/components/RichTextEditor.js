@@ -78,7 +78,7 @@ class RichTextEditor extends React.Component {
 
   render() {
     const {editorState} = this.state;
-
+    console.log('props: ', this.props)
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
@@ -89,8 +89,15 @@ class RichTextEditor extends React.Component {
       }
     }
 
+    const divStyle = {}
+    if (this.props.colorTheme == 'light') {
+      divStyle.background = '#fff'
+    } else {
+      divStyle.background = '#121212'
+    }
+
     return (
-      <div className="RichEditor-root">
+      <div className="RichEditor-root" style={divStyle}>
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}

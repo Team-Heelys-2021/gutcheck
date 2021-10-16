@@ -39,7 +39,7 @@ function App(props) {
     history.push('/login');
   };
 
-  const {toggleColorTheme} = props;
+  const {colorTheme, toggleColorTheme} = props;
 
   const oktaAuth = new OktaAuth({
     issuer: `${process.env.OKTA_ORG_URL}/oauth2/default`,
@@ -79,7 +79,7 @@ function App(props) {
           </Route>
           <Route exact path="/journal">
             <AppBar toggleColorTheme={toggleColorTheme}/>
-            <Journal />
+            <Journal colorTheme={colorTheme}/>
           </Route>
           <Route exact path="/meditation">
             <AppBar toggleColorTheme={toggleColorTheme}/>

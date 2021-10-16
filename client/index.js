@@ -47,7 +47,7 @@ function Layer() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          <App toggleColorTheme={toggleColorTheme}/>
+          <App toggleColorTheme={toggleColorTheme} colorTheme={colorTheme}/>
         </BrowserRouter>
       </ThemeProvider>
     </React.StrictMode>

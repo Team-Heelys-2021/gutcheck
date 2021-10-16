@@ -8,7 +8,7 @@ import axios from 'axios';
 import Calendar from '../components/Calendar.js';
 import RichTextEditor from '../components/RichTextEditor.js';
 
-const Journal = () => {
+const Journal = (props) => {
   const [currentDate, setcurrentDate] = useState(new Date());
   const [journalContent, setJournalContent] = useState();
   const [initContent, setInitContent] = useState();
@@ -72,6 +72,7 @@ const Journal = () => {
                 currentDate={currentDate}
                 updateContent={setJournalContent}
                 initContent={initContent}
+                colorTheme={props.colorTheme}
               />
             </Grid>
             <Grid item xs={4} id="calendar_container">
