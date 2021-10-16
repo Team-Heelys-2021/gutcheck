@@ -12,28 +12,26 @@ import Journal from './pages/Journal';
 import Meditation from './pages/Meditation';
 import Exercise from './pages/Exercise';
 import Paper from '@mui/material/Paper';
-import beachImg from './img/beach.jpg';
+import Container from '@mui/material/Container';
 
 const styles = {
   paperContainer: {
-     height: "100%",
-     //width: "100",
+    height: '100%',
+    //width: "100",
     //height: 800,
-    backgroundImage: `url(${beachImg})`,
+    // backgroundImage: `url(${beachImg})`,
     // backgroundSize: 'cover',
     // backgroundPosition: 'cover',
     //width: `calc(100vw + 48px)`,
     // margin: -24,
     // padding: 24,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    backgroundAttachment: "fixed",
+    // backgroundRepeat: "no-repeat",
+    // backgroundPosition: "center center",
+    // backgroundSize: "cover",
+    // backgroundAttachment: "fixed",
     // height: "100%"
   },
 };
-
-
 
 function App() {
   const history = useHistory();
@@ -82,10 +80,10 @@ function App() {
             <Journal />
           </Route>
           <Route exact path="/meditation">
-            <Paper style={styles.paperContainer}>
-              <AppBar />
+            <AppBar />
+            <Container>
               <Meditation />
-            </Paper>
+            </Container>
           </Route>
         </Switch>
       </Security>
