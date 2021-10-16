@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const dotenv = require('dotenv');
+const nodeExternals = require('webpack-node-externals');
+
 
 module.exports = () => {
   const env = dotenv.config().parsed;
@@ -12,6 +14,10 @@ module.exports = () => {
   }, {});
 
   return {
+    // adding the below two lines while importing and installing node externals module stopped the too many files error,
+    // but dev server still won't run (just no error message)
+    // externalsPresets: { node: true },
+    // externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
     mode: 'development',
     entry: ['@babel/polyfill', './client/index.js'],
     output: {

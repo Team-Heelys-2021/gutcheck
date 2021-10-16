@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -8,19 +8,14 @@ import Timer from './Timer.js';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
-  padding: theme.spacing(2),
+
+  padding: theme.spacing(1),
+
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
 
 export default function Meditation_Component() {
-    const [durationInSeconds, setDurationInSeconds] = useState(0);
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-
-    function setDurationInMinutes(duration) {
-      setDurationInSeconds(duration * 60); 
-      forceUpdate()
-    }
 
     return (
         <Grid>
@@ -36,4 +31,3 @@ export default function Meditation_Component() {
         </Grid>
       )
     };
-
