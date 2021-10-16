@@ -7,19 +7,20 @@ const {
 journalController.getJournalEntry = async (req, res, next) => {
   try {
     const userId = req.user.uid;
-    const date = req.params.date ? req.params.date : new Date();
+    const currentDate = new Date()
+    const date = req.params.date ? req.params.date : currentDate.toISOString().split('T')[0];
 
     let journalEntry = await JournalEntries.findOne({
       where: {
         userId: userId,
-        date: date.toISOString().split('T')[0],
+        date: date,
       },
     });
 
     res.locals.journalEntry = journalEntry;
     next();
   } catch (err) {
-    console.log('Error at journalController.getEntry: ', err);
+    console.log('Error at journalController.getJournalEntry: ', err);
     return next(err);
   }
 };

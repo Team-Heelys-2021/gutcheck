@@ -11,7 +11,8 @@ import RichTextEditor from '../components/RichTextEditor.js';
 
 const Journal = () => {
   const [currentDate, setcurrentDate] = useState(new Date());
-  const [journalContent, setJournalContent] = useState({});
+  const [journalContent, setJournalContent] = useState();
+  const [initContent, setInitContent] = useState({});
   const { authState } = useOktaAuth();
   useAuth();
 
@@ -20,18 +21,29 @@ const Journal = () => {
   }
 
   useEffect(() => {
-    if (authState?.isAuthenticated && journalContent != {}){
+    if (authState?.isAuthenticated && journalContent){
       console.log('currContent: ', journalContent)
       const reqBody = {
         date: currentDate,
         content: JSON.stringify(journalContent),
       }
       axios.post('/api/createJournalEntry', reqBody).then((res) => {
-        console.log(res)
+        console.log('pust entry: ', res)
       })
 
     }
   }, [journalContent])
+
+
+  useEffect(() => {
+    if (authState?.isAuthenticated) {
+      const formattedDate = currentDate.toISOString().split('T')[0];
+      axios.get('/api/journalEntry/' + formattedDate).then((res)=> {
+        console.log('date: ', formattedDate);
+        console.log('entry: ', res)
+      })
+    }
+  }, [currentDate])
 
   // useEffect(() => {
   //   async function fetchMyApi() {
@@ -44,7 +56,9 @@ const Journal = () => {
 
 
   function handleDayClick(day) {
-    if (day <= new Date()) {
+    const today = new Date();
+    const tomorrow =  new Date(today.getTime() + (24 * 60 * 60 * 1000));
+    if (day < tomorrow) {
       setcurrentDate(day);
     }
   }

@@ -78,7 +78,9 @@ const Gutcheck = () => {
   }, [selectedValue]);
 
   function handleDayClick(day) {
-    if (day <= new Date()) {
+    const today = new Date();
+    const tomorrow =  new Date(today.getTime() + (24 * 60 * 60 * 1000));
+    if (day < tomorrow) {
       setcurrentDate(day);
     }
   }
@@ -126,7 +128,7 @@ const Gutcheck = () => {
               {data?.length && <BarChart entries={data} />}
             </Grid>
             <Grid item xs={4} id="calendar_container">
-              <Calendar handleDayClick={handleDayClick} />
+              <Calendar handleDayClick={handleDayClick} selectedDay={currentDate}/>
             </Grid>
             <Grid item xs={8}>
               <Autocomplete
