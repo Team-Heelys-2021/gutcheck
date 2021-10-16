@@ -14,6 +14,7 @@ import BookIcon from '@mui/icons-material/Book';
 import MapIcon from '@mui/icons-material/Map';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import StripeButton from './StripeButton.js';
 
 import { useOktaAuth } from '@okta/okta-react';
 import DashboardIcon from '@mui/icons-material/DashboardOutlined';
@@ -58,7 +59,7 @@ export default function ButtonAppBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <StripeButton/>
           </IconButton>
           <Typography variant="h4" component="div" sx={{ flexGrow: 1, fontFamily: 'Shadows Into Light' }}>
             MeTime

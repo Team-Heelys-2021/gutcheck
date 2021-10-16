@@ -69,8 +69,23 @@
 }
 
 .map-container {
-  height: 400px;
+  height: 100vw;
+  width: 100vw;
 }
+
+.mapbox-gl {
+  height: 100vw;
+  width: 100vw;
+}
+
+
+// #map {
+//   position: absolute;
+//   top: 0;
+//   bottom: 0;
+//   width: 100%;
+// }
+
 
 
 .page_calendar_container {
@@ -151,4 +166,8 @@
 
 .MuiContainer-root {
   margin-top: 20px;
+}
+
+#happyPlace-title {
+  margin-left: 35px;
 }
